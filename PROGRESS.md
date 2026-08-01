@@ -7,7 +7,7 @@ Plan: ver `PLAN.md`. Convención: un commit de git por fase completada + actuali
 
 | Fase | Descripción | Estado |
 |---|---|---|
-| 0 | Scaffold Vite + React + TS + Tailwind + git init | ⬜ Pendiente |
+| 0 | Scaffold Vite + React + TS + Tailwind + git init | ✅ Completada |
 | 1 | Modelo de datos (`data/cv.ts`), i18n base, hooks | ⬜ Pendiente |
 | 2 | Layout: navbar, hero, footer, dark/light | ⬜ Pendiente |
 | 3 | Secciones: sobre mí, experiencia (timeline), skills, educación, proyectos | ⬜ Pendiente |
@@ -22,6 +22,14 @@ Plan: ver `PLAN.md`. Convención: un commit de git por fase completada + actuali
 - ✅ Hecho: ...
 - Commit: `...`
 -->
+
+### Fase 0 — Scaffold (2026-08-01)
+- ✅ Vite 8.2 + React + TS scaffold en raíz (creado en temp y movido — el dir no estaba vacío)
+- ✅ Tailwind CSS v4.3.3 (plugin `@tailwindcss/vite`), dark variant + print CSS base en `src/index.css`
+- ✅ Dev server verificado: HTTP 200 en localhost:5173
+- ✅ Gestor de paquetes: **pnpm** (nunca npm) — preferencia del usuario
+- ✅ Git init (`main`), `.hermes/` añadido a `.gitignore`, assets demo del scaffold eliminados
+- Commit: `fae4d7c chore: scaffold vite react-ts + tailwind v4`
 
 ## Pendientes (TODOs)
 
