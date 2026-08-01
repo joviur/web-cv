@@ -126,6 +126,217 @@ html.js [data-reveal].revealed {
   }
 }
 
+/* ===== Modal de contacto (SPEC-contacto §5.1 / §5.4) =====
+   Progressive enhancement: sin JS el modal se renderiza como bloque
+   normal dentro del footer (formulario funcional con submit nativo).
+   Con html.js, [data-modal-contacto] se oculta hasta que .open. */
+[data-modal-contacto] {
+  /* Base sin JS: bloque normal en el flujo (formulario inline en footer) */
+  margin-top: 1rem;
+  border: 1px solid var(--color-line);
+  background: var(--color-panel);
+}
+html.js [data-modal-contacto] {
+  /* Con JS: oculto del flujo, vive como modal flotante */
+  display: none;
+}
+html.js [data-modal-contacto].open {
+  display: flex;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0;
+  background: transparent;
+  border: none;
+  padding: 1rem;
+  /* CA-3.4: fade + scale 0.98→1 en 0.15s (animado en .modal-ventana) */
+}
+.modal-overlay {
+  display: none;
+}
+html.js [data-modal-contacto].open .modal-overlay {
+  display: block;
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, #000 50%, transparent);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+.modal-ventana {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  max-height: 85vh;
+  overflow-y: auto;
+  background: var(--color-panel);
+  border: 1px solid var(--color-line);
+  scroll-margin: 1rem;
+}
+html.js [data-modal-contacto].open .modal-ventana {
+  animation: modal-in 0.15s ease both;
+}
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.js [data-modal-contacto].open .modal-ventana {
+    animation: none;
+  }
+}
+.modal-titulo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--color-line);
+  font-size: 12px;
+  color: var(--color-muted);
+}
+.modal-semaforos {
+  display: inline-flex;
+  gap: 0.375rem;
+  flex-shrink: 0;
+}
+.dot {
+  display: inline-block;
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 9999px;
+}
+.dot-rojo {
+  background: #e4572e;
+}
+.dot-amber {
+  background: var(--color-amber);
+}
+.dot-phos {
+  background: var(--color-phos);
+}
+.modal-titulo-texto {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.modal-cerrar-x {
+  flex-shrink: 0;
+  font-family: inherit;
+  font-size: 11px;
+  color: var(--color-muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+.modal-cerrar-x:hover {
+  color: var(--color-phos);
+}
+.modal-prompt {
+  padding: 0.5rem 0.75rem;
+  font-size: 12px;
+  color: var(--color-muted);
+  border-bottom: 1px solid var(--color-line);
+}
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
+}
+.modal-honeypot {
+  position: absolute;
+  left: -9999px;
+  top: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.modal-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  font-size: 12px;
+}
+.modal-campo label {
+  color: var(--color-muted);
+}
+.modal-campo .opcional {
+  color: var(--color-muted);
+  opacity: 0.7;
+  font-size: 11px;
+}
+.modal-campo input,
+.modal-campo textarea {
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--color-ink);
+  background: var(--color-base);
+  border: 1px solid var(--color-line);
+  padding: 0.3rem 0.5rem;
+  outline: none;
+  resize: vertical;
+}
+.modal-campo input:focus,
+.modal-campo textarea:focus {
+  border-color: var(--color-phos);
+}
+.modal-acciones {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.25rem;
+}
+.modal-acciones button {
+  font-family: inherit;
+  font-size: 12px;
+  color: var(--color-muted);
+  background: transparent;
+  border: 1px solid var(--color-line);
+  padding: 0.25rem 0.6rem;
+  cursor: pointer;
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+.modal-acciones button:hover:not(:disabled) {
+  color: var(--color-phos);
+  border-color: var(--color-phos);
+}
+.modal-acciones button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.modal-estado {
+  padding: 0 0.75rem 0.75rem;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--color-ink);
+  min-height: 1.5em;
+}
+.modal-cerrar-btn {
+  font-family: inherit;
+  font-size: 12px;
+  color: var(--color-muted);
+  background: transparent;
+  border: 1px solid var(--color-line);
+  padding: 0.25rem 0.6rem;
+  cursor: pointer;
+  margin-top: 0.5rem;
+}
+.modal-cerrar-btn:hover {
+  color: var(--color-phos);
+  border-color: var(--color-phos);
+}
+
 /* ===== Vista de impresión / PDF ===== */
 @media print {
   /* El PDF siempre sale en tema claro: en dark mode se remapean los tokens */
@@ -159,5 +370,10 @@ html.js [data-reveal].revealed {
   }
   section {
     break-inside: avoid;
+  }
+  /* SPEC-contacto §5.4: modal (abierto o cerrado) y CTAs no se imprimen */
+  [data-modal-contacto],
+  [data-contact-open] {
+    display: none !important;
   }
 }

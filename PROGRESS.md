@@ -20,8 +20,19 @@ Plan: ver `PLAN.md`. Convención: un commit de git por fase completada + actuali
 | 10 | Migración Vite+React → **Astro 5 + JS vanilla** (ver `PLAN-MIGRACION.md`) | ✅ Completada |
 | 11 | Animación de tipeo tipo terminal en el hero (ver `SPEC-hero-typing.md` + `PLAN-hero-typing.md`) | ✅ Completada |
 | 12 | Resto de la página oculto durante el boot (ver `SPEC-hero-resto.md`) — codificación con opencode | ✅ Completada |
+| 13 | Contacto: modal TUI + endpoint propio (ver `SPEC-contacto.md`) — email/teléfono fuera de la web | ✅ Completada (frontend) · ⬜ backend VPS pendiente |
 
 ## Historial de fases
+
+### Fase 13 — Contacto por modal TUI + endpoint propio (2026-08-01)
+Spec Driven Design: `SPEC-contacto.md` v1.0 (decisiones D1-A/D2-A email y teléfono nunca visibles, D3-A idiomas fuera, D4 CTA navbar+footer, D5 modal ventana TUI, D7 campos nombre/empresa/mail/asunto opcional/mensaje, D8 asunto default server-side, D9 agradecimiento post-envío, D11 honeypot+rate limit, D12 endpoint VPS+Resend, D13 progressive enhancement, D14 print limpio). Codificación delegada a **opencode** (`opencode run --agent build`).
+- **Comportamiento**: el footer ya no muestra email, teléfono ni idiomas (eliminados también de `cv.ts`/`CvData` — el email real solo vive en la config del VPS). Dos botones `[contactar]` (navbar + footer) abren un modal ventana TUI (semáforos, prompt `./contactar`, campos con `label >`). Envío `fetch POST /api/contacto` con estados: `enviando…` → `✓ mensaje enviado` + agradecimiento ("…te responderé muy pronto") + `[cerrar]`, o `✗` genérico conservando los datos. Focus trap, ESC/`[x]`/overlay cierran, foco restaurado al botón de origen. Sin JS: el formulario se ve inline en el footer con submit nativo (`action=/api/contacto method=post`). Print sin modal ni CTAs.
+- **Cambios (7 archivos + opencode.json)**: `ContactModal.astro` (nuevo, modal + lógica vanilla tipada), `Footer.astro` (botón + ubicación + `<ContactModal />`), `Navbar.astro` (botón con icono sobre), `cv.ts`/`types/cv.ts` (email/teléfono/idiomas eliminados), `translations.ts` (bloque `contacto` con 17 claves), `global.css` (+216 líneas: modal, progressive enhancement `html.js`, animación `modal-in` 0.15s, print). `opencode.json` (permisos bash para opencode run, clave `permission` — necesario: sin él opencode auto-rechaza bash y aborta)
+- **Fixes de Hermes post-opencode (2)**: foco inicial del modal apuntaba al honeypot (`form.querySelector` devolvía el primer input = website) → selector `input:not([name="website"])`; `novalidate` sin validación manual (desviación del SPEC) → eliminado, validación HTML nativa (`required`/`type=email`/`minlength`)
+- **Verificado en navegador** (preview + console): foco inicial en `contacto-nombre`; focus trap `[enviar]→Tab→[x]`; ESC cierra y restaura foco al botón; overlay cierra; envío éxito (body `{website:"",nombre,empresa,mail,asunto:"",mensaje}` + agradecimiento + form oculto); error 500 → `✗` genérico + datos conservados + botón re-habilitado; sin-JS (sin `html.js`) → bloque estático en footer con `action/method`; dark mode con tokens (`#0e110f` panel, phos `#5ce08a`); validación nativa bloquea submit vacío sin llamar a fetch; console 0 errores
+- **Métricas**: JS total 2.3 KB gzip (modal 1124 B gzip — presupuesto <10 KB cumplido); tests 13/13, lint 0 errores, build OK; grep `josema.vizcainourban|662 690` en src+dist → 0 resultados; sin `mailto:`/`tel:` en componentes
+- **Pendiente**: backend del endpoint (SPEC §5.6: contenedor Podman + Resend) — requiere decisión de deploy.sh (A/B/C/D) y permiso del usuario para el VPS
+- Commits: `455ff3c` (docs SPEC)
 
 ### Fase 12 — Resto de la página oculto durante el boot del hero (2026-08-01)
 Spec Driven Design: `SPEC-hero-resto.md` v1.0 (decisiones D1-A `display:none`, D2-A hero arriba, D3-B fade 0.5 s, D4-A footer oculto). Codificación delegada a **opencode** (`opencode run --agent build`, OpenCode Go).

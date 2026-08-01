@@ -25,6 +25,25 @@ export interface Translation {
     resultados: string
   }
   footer: { fin: string }
+  contacto: {
+    abrir: string
+    titulo: string
+    comando: string
+    nombre: string
+    empresa: string
+    mail: string
+    asunto: string
+    asuntoOpcional: string
+    mensaje: string
+    enviar: string
+    enviando: string
+    cerrar: string
+    exitoTitulo: string
+    gracias: string
+    error: string
+    ariaAbrir: string
+    ariaCerrar: string
+  }
 }
 
 export const translations: Record<Lang, Partial<Translation>> = {
@@ -53,6 +72,26 @@ export const translations: Record<Lang, Partial<Translation>> = {
       resultados: 'resultados',
     },
     footer: { fin: 'fin del fichero' },
+    contacto: {
+      abrir: 'contactar',
+      titulo: '✉ contacto — web-cv',
+      comando: 'josema@dev:~$ ./contactar',
+      nombre: 'nombre',
+      empresa: 'empresa',
+      mail: 'mail',
+      asunto: 'asunto',
+      asuntoOpcional: '(opcional)',
+      mensaje: 'mensaje',
+      enviar: 'enviar',
+      enviando: 'enviando…',
+      cerrar: 'cerrar',
+      exitoTitulo: 'mensaje enviado',
+      gracias:
+        'Gracias por ponerte en contacto conmigo. He recibido tu mensaje y te responderé muy pronto.',
+      error: 'no se ha podido enviar — inténtalo de nuevo más tarde',
+      ariaAbrir: 'Abrir formulario de contacto',
+      ariaCerrar: 'Cerrar',
+    },
   },
   // TODO(i18n): completar traducción al inglés cuando se implemente.
   // Mientras tanto, todo resuelve con fallback a español.

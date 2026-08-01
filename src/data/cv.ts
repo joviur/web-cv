@@ -4,8 +4,6 @@ export const cv: CvData = {
   nombre: 'José María Vizcaíno',
   titulo: 'Software Engineer',
   ubicacion: 'Alicante, España',
-  email: '[email-eliminado]',
-  telefono: '[telefono eliminado]',
   resumen:
     'Titulado en Administración de Sistemas Informáticos en Red (ASIR). ' +
     'Automatización y orquestación de procesos con Control-M, desarrollo RPA ' +
@@ -100,11 +98,6 @@ export const cv: CvData = {
       centro: 'I.E.S. Villa de Aspe, Aspe (Alicante)',
       anio: '2018',
     },
-  ],
-  idiomas: [
-    { nombre: 'Español', nivel: 'Nativo' },
-    { nombre: 'Valenciano', nivel: 'Nativo' },
-    { nombre: 'Inglés', nivel: 'A2' },
   ],
   proyectos: [], // ⭐ Sección oculta hasta que haya proyectos que mostrar
 }

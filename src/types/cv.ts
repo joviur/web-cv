@@ -24,11 +24,6 @@ export interface Educacion {
   anio: string
 }
 
-export interface Idioma {
-  nombre: string
-  nivel: string
-}
-
 export interface Proyecto {
   nombre: string
   descripcion: string
@@ -41,12 +36,9 @@ export interface CvData {
   nombre: string
   titulo: string
   ubicacion: string
-  email: string
-  telefono: string
   resumen: string
   experiencia: Experiencia[]
   skills: Skill[]
   educacion: Educacion[]
-  idiomas: Idioma[]
   proyectos: Proyecto[]
 }

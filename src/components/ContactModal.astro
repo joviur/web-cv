@@ -1,0 +1,201 @@
+---
+import { t } from '../i18n/translations'
+---
+
+<div
+  data-modal-contacto
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="contacto-titulo"
+>
+  <div class="modal-overlay" data-contacto-cerrar></div>
+  <div class="modal-ventana">
+    <div class="modal-titulo">
+      <span class="modal-semaforos" aria-hidden="true">
+        <span class="dot dot-rojo"></span>
+        <span class="dot dot-amber"></span>
+        <span class="dot dot-phos"></span>
+      </span>
+      <span id="contacto-titulo" class="modal-titulo-texto">{t('contacto.titulo')}</span>
+      <button
+        type="button"
+        class="modal-cerrar-x"
+        data-contacto-cerrar
+        aria-label={t('contacto.ariaCerrar')}
+      >[x]</button>
+    </div>
+    <p class="modal-prompt">{t('contacto.comando')}</p>
+    <form
+      class="modal-form"
+      data-contacto-form
+      action="/api/contacto"
+      method="post"
+    >
+      <div class="modal-honeypot" aria-hidden="true">
+        <label>Website: <input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+      </div>
+      <div class="modal-campo">
+        <label for="contacto-nombre">{t('contacto.nombre')} <span aria-hidden="true">&gt;</span></label>
+        <input id="contacto-nombre" name="nombre" type="text" required />
+      </div>
+      <div class="modal-campo">
+        <label for="contacto-empresa">{t('contacto.empresa')} <span aria-hidden="true">&gt;</span></label>
+        <input id="contacto-empresa" name="empresa" type="text" />
+      </div>
+      <div class="modal-campo">
+        <label for="contacto-mail">{t('contacto.mail')} <span aria-hidden="true">&gt;</span></label>
+        <input id="contacto-mail" name="mail" type="email" required />
+      </div>
+      <div class="modal-campo">
+        <label for="contacto-asunto">
+          {t('contacto.asunto')} <span aria-hidden="true">&gt;</span>
+          <span class="opcional">{t('contacto.asuntoOpcional')}</span>
+        </label>
+        <input id="contacto-asunto" name="asunto" type="text" />
+      </div>
+      <div class="modal-campo">
+        <label for="contacto-mensaje">{t('contacto.mensaje')} <span aria-hidden="true">&gt;</span></label>
+        <textarea id="contacto-mensaje" name="mensaje" rows="4" required minlength="10"></textarea>
+      </div>
+      <div class="modal-acciones">
+        <button type="submit" data-contacto-enviar>[{t('contacto.enviar')}]</button>
+      </div>
+    </form>
+    <p data-contacto-estado class="modal-estado" role="status" aria-live="polite"></p>
+  </div>
+</div>
+
+<script>
+  import { t } from '../i18n/translations'
+
+  // === Modal de contacto (SPEC-contacto §5.1) ===
+  const modal = document.querySelector<HTMLElement>('[data-modal-contacto]')
+  if (modal) {
+    const form = modal.querySelector<HTMLFormElement>('[data-contacto-form]')!
+    const enviar = modal.querySelector<HTMLButtonElement>('[data-contacto-enviar]')!
+    const estado = modal.querySelector<HTMLElement>('[data-contacto-estado]')!
+    const ventana = modal.querySelector<HTMLElement>('.modal-ventana')!
+    // El modal vive dentro de <footer data-tipeo-resto>: durante el boot del
+    // hero ese contenedor está display:none (E12). Si el usuario abre el modal
+    // antes, esperamos a que el contenedor se haga visible.
+    const rest = modal.closest<HTMLElement>('[data-tipeo-resto]')
+    let opener: HTMLElement | null = null
+
+    const focusables = (): HTMLElement[] => {
+      const sel = 'a,button,input,textarea,select,[tabindex]:not([tabindex="-1"])'
+      return [...ventana.querySelectorAll<HTMLElement>(sel)].filter(
+        (el) => !el.hasAttribute('disabled') && el.offsetParent !== null,
+      )
+    }
+
+    const trapTab = (e: KeyboardEvent): void => {
+      if (e.key !== 'Tab') return
+      const items = focusables()
+      if (items.length === 0) return
+      const first = items[0]!
+      const last = items[items.length - 1]!
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault()
+        first.focus()
+      }
+    }
+
+    const reset = (): void => {
+      form.hidden = false
+      enviar.disabled = false
+      enviar.textContent = `[${t('contacto.enviar')}]`
+      estado.textContent = ''
+    }
+
+    const cerrar = (): void => {
+      modal.classList.remove('open')
+      form.reset()
+      reset()
+      opener?.focus()
+    }
+
+    const abrir = (origen: HTMLElement): void => {
+      const show = (): void => {
+        reset()
+        modal.classList.add('open')
+        opener = origen
+        // Excluir el honeypot (primer input del form): el foco inicial va
+        // al primer campo visible — el nombre.
+        const first = form.querySelector<HTMLElement>(
+          'input:not([name="website"]),textarea,button',
+        )
+        first?.focus()
+      }
+      if (rest && !rest.classList.contains('visible')) {
+        opener = origen
+        const obs = new MutationObserver(() => {
+          if (rest.classList.contains('visible')) {
+            obs.disconnect()
+            show()
+          }
+        })
+        obs.observe(rest, { attributes: true, attributeFilter: ['class'] })
+        return
+      }
+      show()
+    }
+
+    // Apertura desde cualquier [data-contact-open] (navbar + footer)
+    for (const btn of document.querySelectorAll<HTMLElement>('[data-contact-open]')) {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault()
+        abrir(btn)
+      })
+    }
+
+    // Cierre: [x] / overlay / [cerrar] (cualquier data-contacto-cerrar)
+    modal.addEventListener('click', (e) => {
+      const tgt = e.target as HTMLElement
+      if (tgt.closest('[data-contacto-cerrar]')) cerrar()
+    })
+
+    // ESC + focus trap (solo con el modal abierto)
+    document.addEventListener('keydown', (e) => {
+      if (!modal.classList.contains('open')) return
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        cerrar()
+        return
+      }
+      trapTab(e)
+    })
+
+    // Submit con fetch + AbortSignal.timeout (CA-4.3)
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault()
+      if (enviar.disabled) return
+      enviar.disabled = true
+      enviar.textContent = `[${t('contacto.enviando')}]`
+      estado.innerHTML = `<span class="text-muted">${t('contacto.enviando')}</span>`
+      const data = Object.fromEntries(new FormData(form).entries())
+      try {
+        const res = await fetch('/api/contacto', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+          signal: AbortSignal.timeout(10000),
+        })
+        if (!res.ok) throw new Error(String(res.status))
+        // Éxito: ocultar el formulario, mostrar agradecimiento + [cerrar]
+        form.hidden = true
+        estado.innerHTML =
+          `<span class="text-phos">✓ ${t('contacto.exitoTitulo')}</span><br/>` +
+          `${t('contacto.gracias')}<br/>` +
+          `<button type="button" class="modal-cerrar-btn" data-contacto-cerrar>[${t('contacto.cerrar')}]</button>`
+      } catch {
+        // Error: mantener los datos del usuario (CA-4.4 / RNF-6)
+        enviar.disabled = false
+        enviar.textContent = `[${t('contacto.enviar')}]`
+        estado.innerHTML = `<span class="text-amber">✗ ${t('contacto.error')}</span>`
+      }
+    })
+  }
+</script>
