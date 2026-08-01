@@ -1,0 +1,98 @@
+---
+import '../styles/global.css'
+import Navbar from '../components/Navbar.astro'
+import Hero from '../components/Hero.astro'
+import Experience from '../components/Experience.astro'
+import Skills from '../components/Skills.astro'
+import Education from '../components/Education.astro'
+import Projects from '../components/Projects.astro'
+import Footer from '../components/Footer.astro'
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f4f3ef" />
+    <meta
+      name="description"
+      content="CV de José María Vizcaíno — Software Engineer. Python, RPA, Linux, SQL, SysAdmin, Control-M."
+    />
+    <meta property="og:type" content="profile" />
+    <meta property="og:title" content="José María Vizcaíno — Software Engineer" />
+    <meta
+      property="og:description"
+      content="CV de José María Vizcaíno — Software Engineer. Python, RPA, Linux, SQL, SysAdmin, Control-M."
+    />
+    <!-- TODO(deploy): sustituir por URL absoluta del dominio al desplegar -->
+    <meta property="og:image" content="/og-image.png" />
+    <meta property="og:locale" content="es_ES" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>José María Vizcaíno — Software Engineer</title>
+    <script is:inline>
+      // Aplicar el tema guardado antes del primer paint (light-first; evita flash).
+      // También marca html.js: el reveal solo oculta contenido si hay JS.
+      try {
+        const root = document.documentElement
+        root.classList.add('js')
+        if (localStorage.getItem('theme') === 'dark') root.classList.add('dark')
+      } catch (e) {
+        /* localStorage no disponible: el default light es correcto */
+      }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="min-h-screen bg-base font-mono text-ink transition-colors">
+    <Navbar />
+    <main class="mx-auto max-w-[780px] px-6">
+      <Hero />
+      <Experience />
+      <Skills />
+      <Education />
+      <Projects />
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<script>
+  // === Reveal on scroll: un único observer global para todos los [data-reveal] ===
+  const revealEls = document.querySelectorAll<HTMLElement>('[data-reveal]')
+  const revealAll = () => {
+    for (const el of revealEls) el.classList.add('revealed')
+  }
+  if ('IntersectionObserver' in window && revealEls.length > 0) {
+    const obs = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            e.target.classList.add('revealed')
+            obs.unobserve(e.target)
+          }
+        }
+      },
+      { threshold: 0.15 },
+    )
+    for (const el of revealEls) obs.observe(el)
+    // Con scroll rápido los elementos pequeños pueden cruzar el viewport sin
+    // disparar el observer: al llegar al fondo, se revelan todos.
+    window.addEventListener(
+      'scroll',
+      () => {
+        const doc = document.documentElement
+        if (window.innerHeight + window.scrollY >= doc.scrollHeight - 4) revealAll()
+      },
+      { passive: true },
+    )
+  } else {
+    // Sin IO (navegadores antiguos): contenido visible directamente
+    revealAll()
+  }
+</script>

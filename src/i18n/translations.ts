@@ -73,3 +73,6 @@ export function resolve(lang: Lang, key: string): string {
   const fb = get(translations.es)
   return typeof fb === 'string' ? fb : key
 }
+
+/** Helper del sitio: idioma fijo ES en build-time (el botón EN sigue oculto). */
+export const t = (key: string): string => resolve('es', key)
