@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+/* Dark mode por clase en <html> (toggle manual, no solo prefers-color-scheme) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+html { scroll-behavior: smooth; }
+
+/* Accesibilidad: respetar reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ===== Vista de impresión / PDF ===== */
+@media print {
+  body { background: #fff !important; color: #000 !important; }
+  .no-print { display: none !important; }
+  /* Forzar visibilidad de elementos con reveal (opacity 0 hasta inView) */
+  [data-inview="false"] { opacity: 1 !important; transform: none !important; }
+  section { break-inside: avoid; }
+}
