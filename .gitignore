@@ -25,3 +25,6 @@ dist-ssr
 
 # Hermes workspace (planes, adjuntos)
 .hermes/
+
+# Astro (tipos generados)
+.astro/
