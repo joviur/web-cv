@@ -83,6 +83,19 @@ html.js.typing [data-tipeo].visible {
   display: none;
 }
 
+/* Resto de la página oculto durante el boot del hero (SPEC-hero-resto) */
+html.js.typing [data-tipeo-resto]:not(.visible) {
+  display: none;
+}
+[data-tipeo-resto].visible {
+  display: block;
+  animation: fade-in 0.5s ease;
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 /* ===== Reveal on scroll =====
    Solo se oculta si hay JS (html.js): sin JS el contenido es visible.
    Un único IntersectionObserver global añade .revealed. */
@@ -140,6 +153,9 @@ html.js [data-reveal].revealed {
   /* La animación de tipeo nunca afecta al PDF: contenido siempre visible */
   html.js.typing [data-tipeo] {
     visibility: visible !important;
+  }
+  html.js.typing [data-tipeo-resto] {
+    display: block !important;
   }
   section {
     break-inside: avoid;

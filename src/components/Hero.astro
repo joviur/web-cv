@@ -133,6 +133,9 @@ const actual = cv.experiencia.find((e) => e.actual) ?? cv.experiencia[0]
         paso.span.replaceChildren(document.createTextNode(paso.texto))
       }
       cursorNombre?.classList.remove('cursor-oculto')
+      for (const el of document.querySelectorAll<HTMLElement>('[data-tipeo-resto]')) {
+        el.classList.add('visible')
+      }
       root.classList.remove('typing')
     }
 

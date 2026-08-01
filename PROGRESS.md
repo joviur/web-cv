@@ -19,8 +19,17 @@ Plan: ver `PLAN.md`. Convención: un commit de git por fase completada + actuali
 | 9 | Light-first + legibilidad (14px, 40em, contraste AA, orden móvil experiencia) | ✅ Completada |
 | 10 | Migración Vite+React → **Astro 5 + JS vanilla** (ver `PLAN-MIGRACION.md`) | ✅ Completada |
 | 11 | Animación de tipeo tipo terminal en el hero (ver `SPEC-hero-typing.md` + `PLAN-hero-typing.md`) | ✅ Completada |
+| 12 | Resto de la página oculto durante el boot (ver `SPEC-hero-resto.md`) — codificación con opencode | ✅ Completada |
 
 ## Historial de fases
+
+### Fase 12 — Resto de la página oculto durante el boot del hero (2026-08-01)
+Spec Driven Design: `SPEC-hero-resto.md` v1.0 (decisiones D1-A `display:none`, D2-A hero arriba, D3-B fade 0.5 s, D4-A footer oculto). Codificación delegada a **opencode** (`opencode run --agent build`, OpenCode Go).
+- **Comportamiento**: mientras `html.typing` está activo, las secciones post-hero y el footer están en `display: none` → la página solo mide el hero (sin zona muerta scrolleable). Al terminar la secuencia (natural o interrupción), `finalizar()` añade `.visible` → fade-in de 0.5 s. Guards intactos: sin-JS, reduced-motion, safety 6 s y print muestran todo siempre
+- **Cambios (4 archivos, aplicados por opencode)**: `index.astro` (div `data-tipeo-resto` envolviendo Experience/Skills/Education/Projects), `Footer.astro` (`data-tipeo-resto` en el raíz), `global.css` (`html.js.typing [data-tipeo-resto]:not(.visible){display:none}` + `.visible` con `@keyframes fade-in` + print override), `Hero.astro` (loop de `.visible` en `finalizar()`)
+- **Nota de flujo**: opencode en modo no interactivo auto-rechaza los permisos de bash → no pudo ejecutar la verificación; el diff sí lo aplicó correctamente. Verificación hecha por Hermes: tests 13/13, lint 0 errores, build OK, 3 reglas CSS presentes en dist/
+- **Verificado en navegador** (iframe + poll): a mitad de animación `restoDisplay: none`, `footerDisplay: none`, `scrollHeight: 598` (solo hero); tras pointerdown: `.visible` + `animation: fade-in`, `typing` retirado, `scrollHeight: 2585`, reveal disparado (h2 opacity 1), footer block; console limpia
+- Commits: `0b526e4` (docs SPEC) + verificación
 
 ### Fase 11 — Animación de tipeo tipo terminal en el hero (2026-08-01)
 Spec Driven Design: `SPEC-hero-typing.md` v1.0 (decisiones cerradas D1-B/D2-A/D3-B/D4-B+C/D5-Sí/D6-A/D7-A) + `PLAN-hero-typing.md`. Commits: 5f0e199 (docs), 81058ec (lib), b26af6e (hero), + verificación.
