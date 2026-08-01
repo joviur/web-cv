@@ -23,7 +23,7 @@ export function Hero() {
         <b className="font-medium text-phos">josema@dev</b>
         <span className="text-amber">:~</span>$ cat cv.txt
       </p>
-      <p className="mt-3 max-w-[46em] text-[13px] leading-relaxed text-muted">
+      <p className="mt-3 max-w-[40em] text-sm leading-relaxed text-muted">
         {cv.resumen}
       </p>
     </section>

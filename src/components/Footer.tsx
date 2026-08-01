@@ -28,7 +28,7 @@ export function Footer() {
         </span>
         <span>{cv.idiomas.map((i) => `${i.nombre} (${i.nivel})`).join(' · ')}</span>
       </div>
-      <p className="mx-auto mt-6 max-w-[780px] px-6 text-[11px] text-line">
+      <p className="mx-auto mt-6 max-w-[780px] px-6 text-[11px] text-muted">
         [ {t('footer.fin')} ]
       </p>
     </footer>

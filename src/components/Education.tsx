@@ -28,7 +28,7 @@ export function Education() {
             <span className="text-xs text-phos">{e.anio}</span>
             <div>
               <h3 className="text-[15px] font-bold">{e.titulo}</h3>
-              <p className="mt-1 text-[13px] text-muted">{e.centro}</p>
+              <p className="mt-1 text-sm text-muted">{e.centro}</p>
             </div>
           </div>
         ))}

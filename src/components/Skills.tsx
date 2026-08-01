@@ -20,7 +20,7 @@ function SkillRow({ nombre, categoria }: { nombre: string; categoria: CategoriaS
     <div
       ref={ref}
       data-inview={inView}
-      className={`flex items-baseline justify-between gap-4 border-b border-line px-1 py-2 text-[13px] transition-all duration-500 ${
+      className={`flex items-baseline justify-between gap-4 border-b border-line px-1 py-2 text-sm transition-all duration-500 ${
         inView ? 'translate-y-0 opacity-100' : 'translate-y-1 opacity-0'
       }`}
     >

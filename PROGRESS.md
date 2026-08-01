@@ -16,8 +16,16 @@ Plan: ver `PLAN.md`. Convención: un commit de git por fase completada + actuali
 | 6 | Build producción + deploy VPS (método pendiente) + README | ✅ Completada (deploy VPS ⬜ pendiente decisión) |
 | 7 | Rediseño anti-AI-slop: tema Registry/Manpage (B), scroll-spy, contenido real | ✅ Completada |
 | 8 | Review: fixes print, responsive móvil, scroll-spy, i18n filtros, a11y, OG | ✅ Completada |
+| 9 | Light-first + legibilidad (14px, 40em, contraste AA, orden móvil experiencia) | ✅ Completada |
 
 ## Historial de fases
+
+### Fase 9 — Light-first + legibilidad (2026-08-01)
+- **Light-first**: tokens base = tema claro; `html.dark` reasigna a dark (inversión completa: hook, Navbar, App, anti-FOUC, theme-color, tests). Verificado: default light, toggle→dark persistido, print sigue forzando claro en dark mode
+- **Contraste AA**: `muted` #75817a dark (4.84:1) / #646b66 light (4.93:1); `amber` light #9a4f00 (5.42:1); footer `[ fin del fichero ]` pasa de `text-line` (1.23:1) a `text-muted`
+- **Legibilidad**: cuerpo de contenido 13px→14px (`text-sm`); resumen hero `max-w-[46em]`→`40em` → ~67 chars/línea en desktop (antes ~93)
+- **Orden móvil experiencia**: puesto primero (`order-1`), fecha/empresa debajo (`order-2`); desktop intacto (fecha izquierda)
+- Verificado en navegador (iframe 375px + print simulado + ratios): tests 11/11, lint 0 errores, build OK
 
 ### Fase 8 — Review round (2026-08-01)
 Review profunda en navegador (viewports 320/360/375, print simulado, ratios de contraste). Fixes aplicados:

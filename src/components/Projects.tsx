@@ -17,7 +17,7 @@ export function Projects() {
         {cv.proyectos.map((p) => (
           <div
             key={p.nombre}
-            className="border-b border-line px-1 py-3 text-[13px]"
+            className="border-b border-line px-1 py-3 text-sm"
           >
             <h3 className="text-[15px] font-bold">{p.nombre}</h3>
             <p className="mt-1 text-muted">{p.descripcion}</p>

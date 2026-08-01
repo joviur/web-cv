@@ -8,11 +8,11 @@ import { Footer } from './components/Footer'
 import { useDarkMode } from './hooks/useDarkMode'
 
 export default function App() {
-  const [light, toggleLight] = useDarkMode()
+  const [dark, toggleDark] = useDarkMode()
 
   return (
     <div className="min-h-screen bg-base font-mono text-ink transition-colors">
-      <Navbar light={light} onToggleLight={toggleLight} />
+      <Navbar dark={dark} onToggleDark={toggleDark} />
       <main className="mx-auto max-w-[780px] px-6">
         <Hero />
         <Experience />

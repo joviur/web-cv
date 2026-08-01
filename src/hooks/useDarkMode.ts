@@ -1,20 +1,20 @@
 import { useEffect, useState } from 'react'
 
 /**
- * Tema del sitio (dark-first). Devuelve [light, toggleLight].
- * - Default: dark (sin clase en <html>)
- * - light: añade la clase `light` (los tokens de color se reasignan en CSS)
+ * Tema del sitio (light-first). Devuelve [dark, toggleDark].
+ * - Default: light (sin clase en <html>)
+ * - dark: añade la clase `dark` (los tokens de color se reasignan en CSS)
  * - Persistencia en localStorage
  */
 export function useDarkMode(): [boolean, () => void] {
-  const [light, setLight] = useState<boolean>(
-    () => localStorage.getItem('theme') === 'light',
+  const [dark, setDark] = useState<boolean>(
+    () => localStorage.getItem('theme') === 'dark',
   )
 
   useEffect(() => {
-    document.documentElement.classList.toggle('light', light)
-    localStorage.setItem('theme', light ? 'light' : 'dark')
-  }, [light])
+    document.documentElement.classList.toggle('dark', dark)
+    localStorage.setItem('theme', dark ? 'dark' : 'light')
+  }, [dark])
 
-  return [light, () => setLight((l) => !l)]
+  return [dark, () => setDark((d) => !d)]
 }

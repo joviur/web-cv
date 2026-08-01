@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0a0c0b" />
+    <meta name="theme-color" content="#f4f3ef" />
     <meta
       name="description"
       content="CV de José María Vizcaíno — Software Engineer. Python, RPA, Linux, SQL, SysAdmin, Control-M."
@@ -21,13 +21,13 @@
     <meta name="twitter:card" content="summary_large_image" />
     <title>José María Vizcaíno — Software Engineer</title>
     <script>
-      // Aplicar el tema guardado antes del primer paint (evita flash dark → light)
+      // Aplicar el tema guardado antes del primer paint (light-first; evita flash)
       try {
-        if (localStorage.getItem('theme') === 'light') {
-          document.documentElement.classList.add('light')
+        if (localStorage.getItem('theme') === 'dark') {
+          document.documentElement.classList.add('dark')
         }
       } catch (e) {
-        /* localStorage no disponible: el default dark es correcto */
+        /* localStorage no disponible: el default light es correcto */
       }
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />

@@ -3,8 +3,8 @@ import { useLang } from '../context/LanguageContext'
 import { PrintButton } from './PrintButton'
 
 interface Props {
-  light: boolean
-  onToggleLight: () => void
+  dark: boolean
+  onToggleDark: () => void
 }
 
 const SECTION_IDS = ['experiencia', 'skills', 'educacion', 'contacto']
@@ -26,7 +26,7 @@ function MoonIcon() {
   )
 }
 
-export function Navbar({ light, onToggleLight }: Props) {
+export function Navbar({ dark, onToggleDark }: Props) {
   const { t } = useLang()
   const [active, setActive] = useState('')
 
@@ -85,11 +85,11 @@ export function Navbar({ light, onToggleLight }: Props) {
             {/* TODO(i18n): botón de idioma oculto hasta que exista translations.en
                 (un botón que no traduce nada es peor que su ausencia) */}
             <button
-              onClick={onToggleLight}
+              onClick={onToggleDark}
               className="flex items-center border border-line px-2 py-0.5 text-[11px] text-muted transition-colors hover:border-phos hover:text-phos"
               aria-label="Cambiar tema"
             >
-              {light ? <SunIcon /> : <MoonIcon />}
+              {dark ? <MoonIcon /> : <SunIcon />}
             </button>
             <PrintButton />
           </span>

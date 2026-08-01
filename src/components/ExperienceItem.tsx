@@ -12,12 +12,13 @@ export function ExperienceItem({ exp }: { exp: Experiencia }) {
         inView ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'
       }`}
     >
-      <div className="text-xs leading-relaxed text-muted">
+      {/* En móvil el puesto va primero (order-1); la fecha/empresa debajo (order-2) */}
+      <div className="order-2 text-xs leading-relaxed text-muted sm:order-1">
         {exp.desde} — {exp.hasta}
         <br />
         {exp.empresa}
       </div>
-      <div>
+      <div className="order-1 sm:order-2">
         <h3 className="text-[15px] font-bold">
           {exp.puesto}
           {exp.actual && (
@@ -31,7 +32,7 @@ export function ExperienceItem({ exp }: { exp: Experiencia }) {
         </h3>
         <ul className="mt-2 list-none">
           {exp.logros.map((l) => (
-            <li key={l} className="py-0.5 text-[13px] leading-relaxed">
+            <li key={l} className="py-0.5 text-sm leading-relaxed">
               <span className="text-phos" aria-hidden="true">
                 »{' '}
               </span>

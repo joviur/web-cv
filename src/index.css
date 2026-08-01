@@ -1,26 +1,26 @@
 @import "tailwindcss";
 
-/* ===== Tokens — tema "Registry / Manpage" (dark-first) ===== */
+/* ===== Tokens — tema "Registry / Manpage" (light-first) ===== */
 @theme {
-  --color-base: #0a0c0b;
-  --color-panel: #0e110f;
-  --color-ink: #d8d4cc;
-  --color-muted: #6f7a72;
-  --color-line: #1d231f;
-  --color-phos: #5ce08a;
-  --color-amber: #ffb454;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-}
-
-/* Variante light: solo se reasignan los tokens */
-html.light {
   --color-base: #f4f3ef;
   --color-panel: #ffffff;
   --color-ink: #1c201d;
-  --color-muted: #6b726c;
+  --color-muted: #646b66;
   --color-line: #dcdcd4;
   --color-phos: #1f7a3d;
-  --color-amber: #b45f06;
+  --color-amber: #9a4f00;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* Variante dark: solo se reasignan los tokens */
+html.dark {
+  --color-base: #0a0c0b;
+  --color-panel: #0e110f;
+  --color-ink: #d8d4cc;
+  --color-muted: #75817a;
+  --color-line: #1d231f;
+  --color-phos: #5ce08a;
+  --color-amber: #ffb454;
 }
 
 html {
@@ -62,10 +62,9 @@ section[id] {
 
 /* ===== Vista de impresión / PDF ===== */
 @media print {
-  /* Remapear tokens al tema claro: el dark-first rompía el print
-     (títulos amber/phos casi invisibles sobre papel blanco) */
-  html,
-  html.light {
+  /* El PDF siempre sale en tema claro: en dark mode se remapean los tokens
+     (dark-first rompía el print: títulos casi invisibles sobre papel blanco) */
+  html.dark {
     --color-base: #ffffff;
     --color-panel: #ffffff;
     --color-ink: #1c201d;
