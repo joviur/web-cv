@@ -47,6 +47,42 @@ section[id] {
   animation: blink 1.1s steps(1) infinite;
 }
 
+/* ===== Tipeo del hero (SPEC-hero-typing) =====
+   Solo se oculta si hay JS y animación habilitada (html.typing, marcado
+   en el script inline del head). Sin JS o reduced-motion → todo visible. */
+html.js.typing [data-tipeo] {
+  visibility: hidden;
+}
+html.js.typing [data-tipeo].visible {
+  visibility: visible;
+}
+/* Última letra escrita: glow sutil que se desvanece solo */
+.glow-char {
+  text-shadow: 0 0 8px color-mix(in srgb, var(--color-phos) 55%, transparent);
+  transition: text-shadow 0.25s ease;
+}
+/* Línea de comando en ejecución: pasa de muted a ink */
+[data-tipeo] {
+  transition: color 0.15s ease;
+}
+.cmd-activo {
+  color: var(--color-ink);
+}
+/* Cursor temporal de tipeo (misma mecánica que .cursor-blink) */
+.cursor-tipeo {
+  display: inline-block;
+  width: 0.6em;
+  height: 1.05em;
+  margin-left: 2px;
+  background: var(--color-phos);
+  vertical-align: -2px;
+  animation: blink 1.1s steps(1) infinite;
+}
+/* El cursor persistente del nombre queda oculto hasta que su tipeo termina */
+.cursor-oculto {
+  display: none;
+}
+
 /* ===== Reveal on scroll =====
    Solo se oculta si hay JS (html.js): sin JS el contenido es visible.
    Un único IntersectionObserver global añade .revealed. */
@@ -100,6 +136,10 @@ html.js [data-reveal].revealed {
   html.js [data-reveal] {
     opacity: 1 !important;
     transform: none !important;
+  }
+  /* La animación de tipeo nunca afecta al PDF: contenido siempre visible */
+  html.js.typing [data-tipeo] {
+    visibility: visible !important;
   }
   section {
     break-inside: avoid;

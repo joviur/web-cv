@@ -34,10 +34,17 @@ import Footer from '../components/Footer.astro'
     <script is:inline>
       // Aplicar el tema guardado antes del primer paint (light-first; evita flash).
       // También marca html.js: el reveal solo oculta contenido si hay JS.
+      // html.typing habilita la animación de tipeo del hero (SPEC-hero-typing)
+      // solo si no hay prefers-reduced-motion; la red de seguridad retira la
+      // clase si el módulo de tipeo no llega a cargar (nada queda oculto).
       try {
         const root = document.documentElement
         root.classList.add('js')
         if (localStorage.getItem('theme') === 'dark') root.classList.add('dark')
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          root.classList.add('typing')
+          setTimeout(() => root.classList.remove('typing'), 6000)
+        }
       } catch (e) {
         /* localStorage no disponible: el default light es correcto */
       }

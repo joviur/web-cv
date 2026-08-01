@@ -5,25 +5,195 @@ const actual = cv.experiencia.find((e) => e.actual) ?? cv.experiencia[0]
 ---
 
 <section id="inicio" class="py-16">
-  <p class="text-[13px] text-muted">
-    <b class="font-medium text-phos">josema@dev</b>
-    <span class="text-amber">:~</span>$ whoami
+  <p
+    class="text-[13px] text-muted"
+    data-tipeo="cmd"
+    aria-label="josema@dev:~$ whoami"
+  >
+    <span aria-hidden="true"
+      ><b class="font-medium text-phos">josema@dev</b
+      ><span class="text-amber">:~</span>$ </span
+    >
+    <span data-tipeo-texto aria-hidden="true">whoami</span>
   </p>
-  <h1 class="mt-5 text-[clamp(22px,6.5vw,46px)] font-bold leading-tight tracking-tight">
-    {cv.nombre}
+  <h1
+    class="mt-5 text-[clamp(22px,6.5vw,46px)] font-bold leading-tight tracking-tight"
+    data-tipeo="out"
+    data-perfil="nombre"
+    aria-label={cv.nombre}
+  >
+    <span data-tipeo-texto aria-hidden="true">{cv.nombre}</span>
     <span
       class="cursor-blink ml-1 inline-block h-[1.05em] w-[11px] bg-phos align-[-2px]"
       aria-hidden="true"
+      data-cursor-nombre
     ></span>
   </h1>
-  <p class="mt-3 text-[13px] font-medium text-phos">
-    {cv.titulo} @ {actual.empresa}
+  <p
+    class="mt-3 text-[13px] font-medium text-phos"
+    data-tipeo="out"
+    data-perfil="nombre"
+    aria-label={`${cv.titulo} @ ${actual.empresa}`}
+  >
+    <span data-tipeo-texto aria-hidden="true"
+      >{cv.titulo} @ {actual.empresa}</span
+    >
   </p>
-  <p class="mt-5 text-[13px] text-muted">
-    <b class="font-medium text-phos">josema@dev</b>
-    <span class="text-amber">:~</span>$ cat cv.txt
+  <p
+    class="text-[13px] text-muted"
+    data-tipeo="cmd"
+    aria-label="josema@dev:~$ cat cv.txt"
+  >
+    <span aria-hidden="true"
+      ><b class="font-medium text-phos">josema@dev</b
+      ><span class="text-amber">:~</span>$ </span
+    >
+    <span data-tipeo-texto aria-hidden="true">cat cv.txt</span>
   </p>
-  <p class="mt-3 max-w-[40em] text-sm leading-relaxed text-muted">
-    {cv.resumen}
+  <p
+    class="mt-3 max-w-[40em] text-sm leading-relaxed text-muted"
+    data-tipeo="out"
+    data-perfil="resumen"
+    aria-label={cv.resumen}
+  >
+    <span data-tipeo-texto aria-hidden="true">{cv.resumen}</span>
   </p>
 </section>
+
+<script>
+  import { planTipeo } from '../lib/typing'
+  import type { PerfilTipeo } from '../lib/typing'
+
+  // Perfil B (SPEC-hero-typing §10): comandos 80 cps, nombre/título 50 cps,
+  // resumen 110 cps, pausa 300 ms entre pasos, jitter ±15 % → total ≈ 4.4 s.
+  const PERFILES: Record<string, PerfilTipeo> = {
+    cmd: { cps: 80, jitter: 0.15 },
+    nombre: { cps: 50, jitter: 0.15 },
+    resumen: { cps: 110, jitter: 0.15 },
+  }
+  const PAUSA_ENTRE_PASOS = 300
+  const DURACION_GLOW = 250
+
+  function animarHero(): void {
+    const root = document.documentElement
+
+    // Guards: el head marcó html.typing solo si hay JS y no reduced-motion.
+    // El HTML ya contiene todo el texto → sin animación no hay nada que hacer.
+    if (!root.classList.contains('typing')) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      root.classList.remove('typing')
+      return
+    }
+
+    interface Paso {
+      el: HTMLElement
+      span: HTMLElement
+      texto: string
+      perfil: PerfilTipeo
+      esComando: boolean
+    }
+
+    const pasos: Paso[] = []
+    const cursorNombre = document.querySelector<HTMLElement>('[data-cursor-nombre]')
+
+    try {
+      // Orden DOM = orden de secuencia (whoami → nombre → título → cat → resumen)
+      for (const el of document.querySelectorAll<HTMLElement>('[data-tipeo]')) {
+        const span = el.querySelector<HTMLElement>('[data-tipeo-texto]')
+        if (!span) continue
+        const esComando = el.dataset.tipeo === 'cmd'
+        const perfil = esComando
+          ? PERFILES.cmd
+          : (PERFILES[el.dataset.perfil ?? ''] ?? PERFILES.nombre)
+        pasos.push({ el, span, texto: span.textContent ?? '', perfil, esComando })
+        span.textContent = '' // vaciar: los caracteres se reimprimen en secuencia
+      }
+      cursorNombre?.classList.add('cursor-oculto')
+    } catch {
+      root.classList.remove('typing')
+      return
+    }
+
+    if (pasos.length === 0) {
+      root.classList.remove('typing')
+      return
+    }
+
+    let temporizador = 0
+    let enCurso = true
+
+    // Natural, por interrupción o por error: texto completo y todo visible.
+    const finalizar = (): void => {
+      if (!enCurso) return
+      enCurso = false
+      window.clearTimeout(temporizador)
+      for (const paso of pasos) {
+        paso.el.classList.add('visible')
+        paso.el.classList.remove('cmd-activo')
+        paso.span.replaceChildren(document.createTextNode(paso.texto))
+      }
+      cursorNombre?.classList.remove('cursor-oculto')
+      root.classList.remove('typing')
+    }
+
+    const tipearPaso = (paso: Paso, onFin: () => void): void => {
+      paso.el.classList.add('visible')
+      if (paso.esComando) paso.el.classList.add('cmd-activo')
+      const delays = planTipeo(paso.texto, paso.perfil)
+      const cursor = document.createElement('span')
+      cursor.className = 'cursor-tipeo'
+      cursor.setAttribute('aria-hidden', 'true')
+      paso.span.append(cursor)
+      let i = 0
+      const tick = (): void => {
+        if (i >= paso.texto.length) {
+          cursor.remove()
+          paso.el.classList.remove('cmd-activo')
+          // El cursor persistente del nombre aparece al terminar su tipeo
+          if (cursorNombre && paso.el.contains(cursorNombre)) {
+            cursorNombre.classList.remove('cursor-oculto')
+          }
+          onFin()
+          return
+        }
+        const ch = paso.texto[i]
+        const chSpan = document.createElement('span')
+        chSpan.className = 'glow-char'
+        chSpan.setAttribute('aria-hidden', 'true')
+        chSpan.textContent = ch
+        paso.span.insertBefore(chSpan, cursor)
+        // El glow se desvanece y el span se colapsa a texto plano
+        setTimeout(() => {
+          chSpan.classList.remove('glow-char')
+          chSpan.replaceWith(document.createTextNode(ch))
+        }, DURACION_GLOW)
+        i++
+        temporizador = window.setTimeout(tick, delays[i] ?? 0)
+      }
+      temporizador = window.setTimeout(tick, delays[0] ?? 0)
+    }
+
+    const ejecutarSecuencia = (idx: number): void => {
+      if (idx >= pasos.length) {
+        finalizar()
+        return
+      }
+      tipearPaso(pasos[idx], () => {
+        temporizador = window.setTimeout(() => ejecutarSecuencia(idx + 1), PAUSA_ENTRE_PASOS)
+      })
+    }
+
+    // Interacción del usuario → completar al instante (SPEC RF-4)
+    window.addEventListener('scroll', finalizar, { once: true, passive: true })
+    window.addEventListener('pointerdown', finalizar, { once: true })
+    window.addEventListener('keydown', finalizar, { once: true })
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') finalizar()
+    })
+    window.addEventListener('beforeprint', finalizar)
+
+    ejecutarSecuencia(0)
+  }
+
+  animarHero()
+</script>
