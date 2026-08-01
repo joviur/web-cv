@@ -18,8 +18,17 @@ Plan: ver `PLAN.md`. Convención: un commit de git por fase completada + actuali
 | 8 | Review: fixes print, responsive móvil, scroll-spy, i18n filtros, a11y, OG | ✅ Completada |
 | 9 | Light-first + legibilidad (14px, 40em, contraste AA, orden móvil experiencia) | ✅ Completada |
 | 10 | Migración Vite+React → **Astro 5 + JS vanilla** (ver `PLAN-MIGRACION.md`) | ✅ Completada |
+| 11 | Animación de tipeo tipo terminal en el hero (ver `SPEC-hero-typing.md` + `PLAN-hero-typing.md`) | ✅ Completada |
 
 ## Historial de fases
+
+### Fase 11 — Animación de tipeo tipo terminal en el hero (2026-08-01)
+Spec Driven Design: `SPEC-hero-typing.md` v1.0 (decisiones cerradas D1-B/D2-A/D3-B/D4-B+C/D5-Sí/D6-A/D7-A) + `PLAN-hero-typing.md`. Commits: 5f0e199 (docs), 81058ec (lib), b26af6e (hero), + verificación.
+- **Comportamiento**: al cargar, el hero se "ejecuta" — `$ whoami` se teclea → nombre → `titulo @ empresa` (2ª salida del whoami) → `$ cat cv.txt` → resumen. Glow de 250 ms por letra (estela phos) + línea de comando activa en `ink`. Solo la línea en curso es visible (como un terminal); pausa 300 ms entre pasos; total real ≈ 3.0 s (el resumen real tiene 150 caracteres, no los 233 del plan antiguo)
+- **Mejora progresiva**: HTML estático intacto (SEO/sin-JS); `html.typing` solo con JS y sin `prefers-reduced-motion` (guard en el script inline del head, mismo patrón que el reveal); red de seguridad 6 s si el módulo no carga (RNF-7); `beforeprint` completa + print fuerza `visibility: visible`
+- **Lógica pura**: `src/lib/typing.ts` — `planTipeo(texto, perfil, aleatorio?)` con jitter inyectable para tests deterministas; 6 tests nuevos
+- **Verificado en navegador** (iframe con poll, sin latencia): a mitad de secuencia solo 2/5 bloques visibles y nombre parcial ("Jos"), 1 único cursor temporal; scroll → completado instantáneo (5/5 bloques completos, 0 cursores temporales, cursor persistente visible); estado final idéntico al estático; `cmd-activo` = token ink en dark y light; console limpia
+- **Métricas**: JS inline en el HTML (0 requests extra), HTML total 5.8 KB gzip (presupuesto < 10 KB cumplido); tests 13/13, lint 0 errores, build OK
 
 ### Fix — Filtros skills: texto invisible en hover (2026-08-01)
 Bug: al activar un filtro de habilidades y pasar el puntero por encima, las letras del botón desaparecían.

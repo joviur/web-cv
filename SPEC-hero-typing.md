@@ -171,7 +171,7 @@ En el script inline existente: además de `html.js`/dark, marcar `html.typing` s
 
 ## 10. Perfiles de velocidad (D3-B, final)
 
-Contenido actual: nombre 19 caracteres, título 26, resumen ≈ 233, `whoami` 6 y `cat cv.txt` 10 (el prompt `josema@dev:~$ ` es estático y no se teclea). Jitter ±15 % por carácter en todos los perfiles. La pausa entre pasos es de 300 ms. **Total real ≈ 4.4 s** (el ajuste 80/50/110 cps + pausa 300 ms compensa el paso extra del título respecto al estimado inicial).
+Contenido actual: nombre 19 caracteres, título 26, resumen ≈ 150 (el plan antiguo de la era React estimaba 233), `whoami` 6 y `cat cv.txt` 10 (el prompt `josema@dev:~$ ` es estático y no se teclea). Jitter ±15 % por carácter en todos los perfiles. La pausa entre pasos es de 300 ms. **Total real ≈ 3.0 s** con el contenido actual (≈ 4.4 s con el resumen de 233 caracteres del plan antiguo).
 
 | Perfil | Comandos | Nombre / Título | Resumen | Pausa entre pasos | Total aprox. |
 |---|---|---|---|---|---|
