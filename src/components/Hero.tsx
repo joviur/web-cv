@@ -9,7 +9,7 @@ export function Hero() {
         <b className="font-medium text-phos">josema@dev</b>
         <span className="text-amber">:~</span>$ whoami
       </p>
-      <h1 className="mt-5 text-[clamp(30px,5.4vw,46px)] font-bold leading-tight tracking-tight">
+      <h1 className="mt-5 text-[clamp(22px,6.5vw,46px)] font-bold leading-tight tracking-tight">
         José María Vizcaíno
         <span
           className="cursor-blink ml-1 inline-block h-[1.05em] w-[11px] bg-phos align-[-2px]"

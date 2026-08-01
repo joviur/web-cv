@@ -16,8 +16,15 @@ export function Footer() {
         >
           {cv.email}
         </a>
-        <span>
-          {cv.telefono} · {cv.ubicacion}
+        <span className="flex flex-wrap items-center gap-x-2">
+          <a
+            href={`tel:${cv.telefono.replace(/\s/g, '')}`}
+            className="text-phos transition-colors hover:underline"
+          >
+            {cv.telefono}
+          </a>
+          <span aria-hidden="true">·</span>
+          <span>{cv.ubicacion}</span>
         </span>
         <span>{cv.idiomas.map((i) => `${i.nombre} (${i.nivel})`).join(' · ')}</span>
       </div>

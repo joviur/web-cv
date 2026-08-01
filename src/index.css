@@ -62,6 +62,18 @@ section[id] {
 
 /* ===== Vista de impresión / PDF ===== */
 @media print {
+  /* Remapear tokens al tema claro: el dark-first rompía el print
+     (títulos amber/phos casi invisibles sobre papel blanco) */
+  html,
+  html.light {
+    --color-base: #ffffff;
+    --color-panel: #ffffff;
+    --color-ink: #1c201d;
+    --color-muted: #3d443f;
+    --color-line: #dcdcd4;
+    --color-phos: #1f7a3d;
+    --color-amber: #9a4f00;
+  }
   body {
     background: #fff !important;
     color: #000 !important;

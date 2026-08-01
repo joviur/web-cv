@@ -7,9 +7,9 @@ export function Experience() {
 
   return (
     <section id="experiencia" className="py-10">
-      <p className="text-[13px] uppercase tracking-[0.18em] text-amber">
+      <h2 className="text-[13px] uppercase tracking-[0.18em] text-amber">
         ## 01 · {t('secciones.experiencia')}
-      </p>
+      </h2>
       <div className="mb-2 border-b border-line" aria-hidden="true" />
       <ul>
         {cv.experiencia.map((exp) => (

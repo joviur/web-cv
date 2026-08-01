@@ -9,9 +9,9 @@ export function Projects() {
 
   return (
     <section id="proyectos" className="py-10">
-      <p className="text-[13px] uppercase tracking-[0.18em] text-amber">
+      <h2 className="text-[13px] uppercase tracking-[0.18em] text-amber">
         ## 04 · {t('secciones.proyectos')}
-      </p>
+      </h2>
       <div className="mb-2 border-b border-line" aria-hidden="true" />
       <div>
         {cv.proyectos.map((p) => (

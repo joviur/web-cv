@@ -4,11 +4,32 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0c0b" />
     <meta
       name="description"
       content="CV de José María Vizcaíno — Software Engineer. Python, RPA, Linux, SQL, SysAdmin, Control-M."
     />
+    <meta property="og:type" content="profile" />
+    <meta property="og:title" content="José María Vizcaíno — Software Engineer" />
+    <meta
+      property="og:description"
+      content="CV de José María Vizcaíno — Software Engineer. Python, RPA, Linux, SQL, SysAdmin, Control-M."
+    />
+    <!-- TODO(deploy): sustituir por URL absoluta del dominio al desplegar -->
+    <meta property="og:image" content="/og-image.png" />
+    <meta property="og:locale" content="es_ES" />
+    <meta name="twitter:card" content="summary_large_image" />
     <title>José María Vizcaíno — Software Engineer</title>
+    <script>
+      // Aplicar el tema guardado antes del primer paint (evita flash dark → light)
+      try {
+        if (localStorage.getItem('theme') === 'light') {
+          document.documentElement.classList.add('light')
+        }
+      } catch (e) {
+        /* localStorage no disponible: el default dark es correcto */
+      }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

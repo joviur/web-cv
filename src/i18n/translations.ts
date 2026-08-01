@@ -15,7 +15,15 @@ export interface Translation {
     idiomas: string
     contacto: string
   }
-  skills: { todos: string }
+  skills: {
+    todos: string
+    desarrollo: string
+    sistemas: string
+    automatizacion: string
+    soft: string
+    resultado: string
+    resultados: string
+  }
   footer: { fin: string }
 }
 
@@ -37,6 +45,12 @@ export const translations: Record<Lang, Partial<Translation>> = {
     },
     skills: {
       todos: 'todos',
+      desarrollo: 'desarrollo',
+      sistemas: 'sistemas',
+      automatizacion: 'automatización',
+      soft: 'soft skills',
+      resultado: 'resultado',
+      resultados: 'resultados',
     },
     footer: { fin: 'fin del fichero' },
   },

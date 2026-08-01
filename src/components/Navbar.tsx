@@ -27,24 +27,38 @@ function MoonIcon() {
 }
 
 export function Navbar({ light, onToggleLight }: Props) {
-  const { lang, toggleLang, t } = useLang()
+  const { t } = useLang()
   const [active, setActive] = useState('')
 
   // Scroll-spy: marca la sección visible en la banda central del viewport
   useEffect(() => {
+    let atBottom = false
     const obs = new IntersectionObserver(
       (entries) => {
+        // Al llegar al fondo manda la marca de contacto (el footer no alcanza la banda)
+        if (atBottom) return
         entries.forEach((e) => {
           if (e.isIntersecting) setActive(e.target.id)
         })
       },
-      { rootMargin: '-40% 0px -55% 0px' },
+      { rootMargin: '-35% 0px -50% 0px' },
     )
     SECTION_IDS.forEach((id) => {
       const el = document.getElementById(id)
       if (el) obs.observe(el)
     })
-    return () => obs.disconnect()
+    // El footer (#contacto) es demasiado bajo para alcanzar la banda central:
+    // marcarlo explícitamente cuando el scroll llega al fondo.
+    const onScroll = () => {
+      const doc = document.documentElement
+      atBottom = window.innerHeight + window.scrollY >= doc.scrollHeight - 8
+      if (atBottom) setActive('contacto')
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      obs.disconnect()
+      window.removeEventListener('scroll', onScroll)
+    }
   }, [])
 
   const links = [
@@ -58,23 +72,18 @@ export function Navbar({ light, onToggleLight }: Props) {
     <header className="no-print sticky top-0 z-50">
       <div className="mx-auto max-w-[780px] px-6">
         {/* Barra tipo TUI */}
-        <div className="flex items-center justify-between border border-t-0 border-line bg-panel px-4 py-2 text-xs text-muted">
-          <span className="flex items-center gap-3">
-            <span className="flex gap-1.5" aria-hidden="true">
+        <div className="flex items-center justify-between gap-3 border border-t-0 border-line bg-panel px-4 py-2 text-xs text-muted">
+          <span className="flex min-w-0 items-center gap-3">
+            <span className="flex shrink-0 gap-1.5" aria-hidden="true">
               <span className="h-2.5 w-2.5 rounded-full bg-[#e4572e]" />
               <span className="h-2.5 w-2.5 rounded-full bg-amber" />
               <span className="h-2.5 w-2.5 rounded-full bg-phos" />
             </span>
-            <span>josema@dev — web-cv</span>
+            <span className="truncate">josema@dev — web-cv</span>
           </span>
-          <span className="flex items-center gap-2">
-            <button
-              onClick={toggleLang}
-              className="border border-line px-2 py-0.5 text-[11px] text-muted transition-colors hover:border-phos hover:text-phos"
-              aria-label="Cambiar idioma"
-            >
-              [{lang === 'es' ? 'EN' : 'ES'}]
-            </button>
+          <span className="flex shrink-0 items-center gap-2">
+            {/* TODO(i18n): botón de idioma oculto hasta que exista translations.en
+                (un botón que no traduce nada es peor que su ausencia) */}
             <button
               onClick={onToggleLight}
               className="flex items-center border border-line px-2 py-0.5 text-[11px] text-muted transition-colors hover:border-phos hover:text-phos"

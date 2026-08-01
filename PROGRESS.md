@@ -15,8 +15,18 @@ Plan: ver `PLAN.md`. Convención: un commit de git por fase completada + actuali
 | 5 | Tests (Vitest + RTL), accesibilidad, responsive | ✅ Completada |
 | 6 | Build producción + deploy VPS (método pendiente) + README | ✅ Completada (deploy VPS ⬜ pendiente decisión) |
 | 7 | Rediseño anti-AI-slop: tema Registry/Manpage (B), scroll-spy, contenido real | ✅ Completada |
+| 8 | Review: fixes print, responsive móvil, scroll-spy, i18n filtros, a11y, OG | ✅ Completada |
 
 ## Historial de fases
+
+### Fase 8 — Review round (2026-08-01)
+Review profunda en navegador (viewports 320/360/375, print simulado, ratios de contraste). Fixes aplicados:
+- **Print**: tokens remapeados al tema claro en `@media print` (los títulos amber/phos salían casi invisibles sobre papel blanco en dark mode)
+- **Responsive**: `clamp(24px,6.5vw,46px)` en el h1 (el nombre se partía en 2 líneas + cursor huérfano en todo móvil); `truncate` + `shrink-0` en la fila superior de la navbar (desbordaba ≤340px)
+- **Scroll-spy**: banda central más ancha (-35%/-50%) + marcado explícito de `contacto` al llegar al fondo (el footer nunca alcanzaba la banda)
+- **i18n**: filtros de skills con `t(c.label)` (antes keys crudas: `[ soft ]`); `aria-live` con plural correcto; botón EN oculto hasta que exista `translations.en`; `lang` del `<html>` dinámico
+- **A11y**: títulos de sección `## 0N` ahora `<h2>` (jerarquía h1→h2→h3); teléfono con `tel:`; script anti-FOUC del tema; `theme-color` + metatags Open Graph + `og-image.png` generado
+- Verificado: tests 11/11, lint 0 errores, build OK
 
 ### Fase 2 — Layout (2026-08-01)
 - ✅ Navbar sticky (scroll suave, toggles dark/EN, botón PDF), Hero, Footer con contacto e idiomas

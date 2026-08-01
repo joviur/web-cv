@@ -7,11 +7,11 @@ import { useInView } from '../hooks/useInView'
 type Filtro = CategoriaSkill | 'Todos'
 
 const categorias: { key: Filtro; label: string }[] = [
-  { key: 'Todos', label: 'todos' },
-  { key: 'Desarrollo', label: 'desarrollo' },
-  { key: 'Sistemas', label: 'sistemas' },
-  { key: 'Automatización', label: 'automatización' },
-  { key: 'Soft skills', label: 'soft' },
+  { key: 'Todos', label: 'skills.todos' },
+  { key: 'Desarrollo', label: 'skills.desarrollo' },
+  { key: 'Sistemas', label: 'skills.sistemas' },
+  { key: 'Automatización', label: 'skills.automatizacion' },
+  { key: 'Soft skills', label: 'skills.soft' },
 ]
 
 function SkillRow({ nombre, categoria }: { nombre: string; categoria: CategoriaSkill }) {
@@ -43,9 +43,9 @@ export function Skills() {
 
   return (
     <section id="skills" className="py-10">
-      <p className="text-[13px] uppercase tracking-[0.18em] text-amber">
+      <h2 className="text-[13px] uppercase tracking-[0.18em] text-amber">
         ## 02 · {t('secciones.skills')}
-      </p>
+      </h2>
       <div className="mb-2 border-b border-line" aria-hidden="true" />
 
       <div className="no-print flex flex-wrap gap-2 py-3">
@@ -60,13 +60,15 @@ export function Skills() {
                 : 'border-line text-muted hover:border-phos hover:text-phos'
             }`}
           >
-            [ {c.label} ]
+            [ {t(c.label)} ]
           </button>
         ))}
       </div>
 
       <p aria-live="polite" className="sr-only">
-        {visibles.length} resultados
+        {visibles.length === 1
+          ? `1 ${t('skills.resultado')}`
+          : `${visibles.length} ${t('skills.resultados')}`}
       </p>
 
       <div>

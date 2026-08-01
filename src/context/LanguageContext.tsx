@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, type ReactNode } from 'react'
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 import { resolve, type Lang } from '../i18n/translations'
 
 interface LanguageCtx {
@@ -13,6 +13,12 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const [lang, setLang] = useState<Lang>('es')
   const toggleLang = () => setLang((l) => (l === 'es' ? 'en' : 'es'))
   const t = (key: string) => resolve(lang, key)
+
+  // El atributo lang del <html> debe reflejar el idioma activo (a11y/SEO)
+  useEffect(() => {
+    document.documentElement.lang = lang
+  }, [lang])
+
   return <Ctx.Provider value={{ lang, toggleLang, t }}>{children}</Ctx.Provider>
 }
 
