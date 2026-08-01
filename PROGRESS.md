@@ -8,7 +8,7 @@ Plan: ver `PLAN.md`. Convención: un commit de git por fase completada + actuali
 | Fase | Descripción | Estado |
 |---|---|---|
 | 0 | Scaffold Vite + React + TS + Tailwind + git init | ✅ Completada |
-| 1 | Modelo de datos (`data/cv.ts`), i18n base, hooks | ⬜ Pendiente |
+| 1 | Modelo de datos (`data/cv.ts`), i18n base, hooks | ✅ Completada |
 | 2 | Layout: navbar, hero, footer, dark/light | ⬜ Pendiente |
 | 3 | Secciones: sobre mí, experiencia (timeline), skills, educación, proyectos | ⬜ Pendiente |
 | 4 | Interactividad: reveal on scroll, filtros skills, vista print/PDF | ⬜ Pendiente |

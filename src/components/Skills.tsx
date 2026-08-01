@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { cv } from '../data/cv'
 import type { CategoriaSkill } from '../types/cv'
 import { useLang } from '../context/LanguageContext'
+import { useInView } from '../hooks/useInView'
 
 type Filtro = CategoriaSkill | 'Todos'
 
@@ -14,8 +15,15 @@ const categorias: Filtro[] = [
 ]
 
 function SkillBadge({ nombre }: { nombre: string }) {
+  const { ref, inView } = useInView<HTMLSpanElement>()
   return (
-    <span className="rounded-full border border-slate-200 px-3 py-1 text-sm transition-colors hover:border-sky-500 dark:border-slate-700">
+    <span
+      ref={ref}
+      data-inview={inView}
+      className={`rounded-full border px-3 py-1 text-sm transition-all duration-500 ${
+        inView ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'
+      } border-slate-200 hover:border-sky-500 dark:border-slate-700`}
+    >
       {nombre}
     </span>
   )

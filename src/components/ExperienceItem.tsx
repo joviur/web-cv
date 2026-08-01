@@ -1,8 +1,17 @@
 import type { Experiencia } from '../types/cv'
+import { useInView } from '../hooks/useInView'
 
 export function ExperienceItem({ exp }: { exp: Experiencia }) {
+  const { ref, inView } = useInView<HTMLLIElement>()
+
   return (
-    <li className="relative">
+    <li
+      ref={ref}
+      data-inview={inView}
+      className={`relative transition-all duration-700 ${
+        inView ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
+      }`}
+    >
       <span
         className="absolute -left-[30px] top-1 h-3 w-3 rounded-full bg-sky-500"
         aria-hidden="true"

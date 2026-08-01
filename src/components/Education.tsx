@@ -1,13 +1,21 @@
 import { cv } from '../data/cv'
 import { useLang } from '../context/LanguageContext'
+import { useInView } from '../hooks/useInView'
 
 export function Education() {
   const { t } = useLang()
+  const { ref, inView } = useInView<HTMLDivElement>()
 
   return (
     <section id="educacion" className="py-16">
       <h2 className="mb-8 text-2xl font-bold">{t('secciones.educacion')}</h2>
-      <div className="grid gap-6 sm:grid-cols-2">
+      <div
+        ref={ref}
+        data-inview={inView}
+        className={`grid gap-6 transition-all duration-700 sm:grid-cols-2 ${
+          inView ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
+        }`}
+      >
         {cv.educacion.map((e) => (
           <article
             key={e.titulo}
