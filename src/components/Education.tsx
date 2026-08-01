@@ -7,24 +7,30 @@ export function Education() {
   const { ref, inView } = useInView<HTMLDivElement>()
 
   return (
-    <section id="educacion" className="py-16">
-      <h2 className="mb-8 text-2xl font-bold">{t('secciones.educacion')}</h2>
+    <section id="educacion" className="py-10">
+      <p className="text-[13px] uppercase tracking-[0.18em] text-amber">
+        ## 03 · {t('secciones.educacion')}
+      </p>
+      <div className="mb-2 border-b border-line" aria-hidden="true" />
+
       <div
         ref={ref}
         data-inview={inView}
-        className={`grid gap-6 transition-all duration-700 sm:grid-cols-2 ${
-          inView ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
+        className={`transition-all duration-700 ${
+          inView ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'
         }`}
       >
         {cv.educacion.map((e) => (
-          <article
+          <div
             key={e.titulo}
-            className="rounded-xl border border-slate-200 p-5 dark:border-slate-800"
+            className="grid gap-1 border-b border-line py-4 sm:grid-cols-[150px_1fr] sm:gap-5"
           >
-            <p className="text-xs font-semibold text-sky-500">{e.anio}</p>
-            <h3 className="mt-1 font-semibold">{e.titulo}</h3>
-            <p className="mt-2 text-sm text-slate-500">{e.centro}</p>
-          </article>
+            <span className="text-xs text-phos">{e.anio}</span>
+            <div>
+              <h3 className="text-[15px] font-bold">{e.titulo}</h3>
+              <p className="mt-1 text-[13px] text-muted">{e.centro}</p>
+            </div>
+          </div>
         ))}
       </div>
     </section>

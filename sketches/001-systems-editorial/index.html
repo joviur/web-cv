@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Variante A — Systems Editorial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #f6f3ee;
+    --fg: #1b1712;
+    --muted: #6b655c;
+    --line: rgba(27, 23, 18, 0.16);
+    --accent: #e4572e;
+    --accent-soft: rgba(228, 87, 46, 0.12);
+  }
+  html.dark {
+    --bg: #0f0e0c;
+    --fg: #ede9e2;
+    --muted: #8d867b;
+    --line: rgba(237, 233, 226, 0.14);
+    --accent: #ff6b3d;
+    --accent-soft: rgba(255, 107, 61, 0.14);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: "IBM Plex Sans", -apple-system, sans-serif;
+    font-weight: 300;
+    line-height: 1.55;
+    transition: background 0.3s, color 0.3s;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 28px; }
+
+  /* top rule — metadata en mono */
+  .top {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--line);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted);
+  }
+  .top button {
+    background: none; border: 1px solid var(--line); color: var(--fg);
+    font-family: inherit; font-size: 11px; letter-spacing: 0.1em;
+    padding: 4px 10px; cursor: pointer; text-transform: uppercase;
+    transition: border-color 0.2s;
+  }
+  .top button:hover { border-color: var(--accent); color: var(--accent); }
+
+  header { padding: 96px 0 72px; }
+  .kicker {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 13px; color: var(--accent); letter-spacing: 0.08em;
+  }
+  h1 {
+    font-family: "Fraunces", serif;
+    font-weight: 560;
+    font-size: clamp(52px, 9vw, 96px);
+    line-height: 0.98;
+    letter-spacing: -0.02em;
+    margin: 22px 0 26px;
+  }
+  h1 em { font-style: italic; color: var(--accent); }
+  .lead {
+    font-size: 17px; color: var(--muted); max-width: 34em;
+    border-left: 2px solid var(--accent); padding-left: 18px;
+  }
+
+  section { padding: 56px 0; border-top: 1px solid var(--line); }
+  .sec-head {
+    display: flex; align-items: baseline; gap: 14px; margin-bottom: 34px;
+  }
+  .sec-num {
+    font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--accent);
+  }
+  .sec-head h2 {
+    font-family: "Fraunces", serif; font-weight: 520; font-size: 30px;
+    letter-spacing: -0.01em;
+  }
+  .sec-head .rule { flex: 1; border-bottom: 1px solid var(--line); }
+
+  /* experiencia */
+  .job { display: grid; grid-template-columns: 1fr auto; gap: 4px 20px; padding: 22px 0; }
+  .job + .job { border-top: 1px solid var(--line); }
+  .job h3 { font-family: "Fraunces", serif; font-weight: 560; font-size: 22px; }
+  .job .when {
+    font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--muted);
+    padding-top: 6px;
+  }
+  .job .role { font-size: 14px; color: var(--muted); margin-top: 2px; }
+  .job ul { grid-column: 1 / -1; margin-top: 12px; list-style: none; }
+  .job li {
+    font-size: 14.5px; padding: 3px 0 3px 22px; position: relative; color: var(--fg);
+  }
+  .job li::before { content: "—"; position: absolute; left: 0; color: var(--accent); }
+  .badge {
+    display: inline-block; font-family: "IBM Plex Mono", monospace; font-size: 10.5px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent);
+    border: 1px solid var(--accent); padding: 2px 8px; margin-left: 10px;
+    vertical-align: 3px;
+  }
+
+  /* skills — registro, sin pills */
+  .skill-row {
+    display: grid; grid-template-columns: 1fr auto; gap: 16px;
+    padding: 11px 2px; border-bottom: 1px solid var(--line);
+    font-size: 14.5px;
+  }
+  .skill-row .cat {
+    font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.1em; padding-top: 2px;
+  }
+
+  /* educación */
+  .edu { display: grid; grid-template-columns: auto 1fr; gap: 6px 22px; padding: 16px 0; }
+  .edu + .edu { border-top: 1px solid var(--line); }
+  .edu .year {
+    font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--accent);
+    padding-top: 3px;
+  }
+  .edu h3 { font-family: "Fraunces", serif; font-weight: 520; font-size: 18px; }
+  .edu .place { font-size: 13.5px; color: var(--muted); }
+
+  footer {
+    border-top: 1px solid var(--line); padding: 40px 0 64px;
+    font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--muted);
+    display: flex; flex-wrap: wrap; gap: 8px 28px; justify-content: space-between;
+  }
+  a { color: var(--fg); text-decoration: none; border-bottom: 1px solid var(--line); transition: color 0.15s, border-color 0.15s; }
+  a:hover { color: var(--accent); border-color: var(--accent); }
+  footer a { color: var(--muted); }
+  footer a:hover { color: var(--accent); }
+  ::selection { background: var(--accent); color: #fff; }
+
+  @media (max-width: 560px) {
+    .job { grid-template-columns: 1fr; }
+    .job .when { grid-row: 1; }
+    header { padding: 64px 0 48px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <span>José María Vizcaíno — Software Engineer</span>
+    <button id="theme">Tema →</button>
+  </div>
+
+  <header>
+    <p class="kicker">Software Engineer · Alicante, ES</p>
+    <h1>José María <em>Vizcaíno</em></h1>
+    <p class="lead">
+      Titulado en ASIR. Automatización y orquestación de procesos con Control-M,
+      desarrollo RPA con Python y administración de sistemas Linux y Windows.
+    </p>
+  </header>
+
+  <section>
+    <div class="sec-head"><span class="sec-num">01</span><h2>Experiencia</h2><span class="rule"></span></div>
+
+    <div class="job">
+      <div>
+        <h3>NTT DATA <span class="badge">Actual</span></h3>
+        <p class="role">Software Engineer</p>
+      </div>
+      <span class="when">07/2023 — hoy</span>
+      <ul>
+        <li>Desarrollo y gestión del orquestador de procesos con Control-M</li>
+        <li>Automatización de transferencias de ficheros</li>
+        <li>Administración de sistemas Linux y Windows · soporte a usuarios</li>
+        <li>Gestión de bases de datos SQL</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <div>
+        <h3>Redarquia Digital</h3>
+        <p class="role">Desarrollador RPA y Administrador de Sistemas</p>
+      </div>
+      <span class="when">10/2022 — 07/2023</span>
+      <ul>
+        <li>Automatizaciones RPA con Python</li>
+        <li>Desarrollo en plataformas LowCode / NoCode</li>
+        <li>Diseño de bases de datos · CI/CD con Jenkins</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <div>
+        <h3>Azaconsa S.L</h3>
+        <p class="role">Responsable de Informática</p>
+      </div>
+      <span class="when">09/2021 — 10/2022</span>
+      <ul>
+        <li>Soporte técnico · control de procesos y planificación de producción</li>
+        <li>Administración de Windows Server y aplicaciones SGA/ERP</li>
+        <li>Gestión de compras y copias de seguridad</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-num">02</span><h2>Habilidades</h2><span class="rule"></span></div>
+    <div class="skill-row"><span>Python · RPA · SQL · CI/CD</span><span class="cat">Desarrollo</span></div>
+    <div class="skill-row"><span>Linux · Windows Server · SysAdmin · AD · Redes · Backups</span><span class="cat">Sistemas</span></div>
+    <div class="skill-row"><span>Control-M · Orquestación · Transferencia de ficheros</span><span class="cat">Automatización</span></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-num">03</span><h2>Educación</h2><span class="rule"></span></div>
+    <div class="edu">
+      <span class="year">2020</span>
+      <div>
+        <h3>CFGS Administración de Sistemas Informáticos en Red (ASIR)</h3>
+        <p class="place">IES Severo Ochoa, Elche</p>
+      </div>
+    </div>
+    <div class="edu">
+      <span class="year">2018</span>
+      <div>
+        <h3>CFGM Sistemas Microinformáticos y Redes (SMR)</h3>
+        <p class="place">IES Villa de Aspe, Aspe</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <a href="mailto:[email-eliminado]">[email-eliminado]</a>
+    <span>[telefono eliminado]</span>
+    <span>ES · VA · EN (A2)</span>
+  </footer>
+
+</div>
+<script>
+  const btn = document.getElementById('theme');
+  btn.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+  });
+</script>
+</body>
+</html>

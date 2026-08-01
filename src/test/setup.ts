@@ -18,3 +18,20 @@ Object.defineProperty(window, 'matchMedia', {
     dispatchEvent: () => false,
   }),
 })
+
+// jsdom no implementa IntersectionObserver (scroll-spy del Navbar, useInView)
+class IntersectionObserverMock {
+  root = null
+  rootMargin = ''
+  thresholds = []
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+  takeRecords() {
+    return []
+  }
+}
+Object.defineProperty(window, 'IntersectionObserver', {
+  writable: true,
+  value: IntersectionObserverMock,
+})

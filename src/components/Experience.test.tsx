@@ -4,23 +4,24 @@ import { Experience } from './Experience'
 import { LanguageProvider } from '../context/LanguageContext'
 
 describe('Experience', () => {
-  it('muestra las empresas en orden, con NTT DATA primero', () => {
+  it('muestra los puestos en orden, con NTT DATA en la primera fila', () => {
     render(
       <LanguageProvider>
         <Experience />
       </LanguageProvider>,
     )
 
-    const empresas = screen
+    const puestos = screen
       .getAllByRole('heading', { level: 3 })
       .map((h) => h.textContent)
 
-    expect(empresas).toEqual([
-      'NTT DATA',
-      'Redarquia Digital',
-      'Azaconsa S.L',
-      'Ayuntamiento de Aspe',
+    expect(puestos).toEqual([
+      'Software Engineer ACTUAL',
+      'Desarrollador RPA y Administrador de Sistemas',
+      'Responsable de Informática y parte del equipo de compras',
+      'Prácticas FCT — Ayudante de Administrador de Sistemas',
     ])
-    expect(screen.getByText('Actualidad')).toBeInTheDocument()
+    expect(screen.getByText(/NTT DATA/)).toBeInTheDocument()
+    expect(screen.getByText('ACTUAL')).toBeInTheDocument()
   })
 })

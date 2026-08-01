@@ -7,43 +7,23 @@ export function Footer() {
   return (
     <footer
       id="contacto"
-      className="border-t border-slate-200 py-12 dark:border-slate-800"
+      className="mt-6 border-t border-line py-8 text-xs text-muted"
     >
-      <div className="mx-auto max-w-4xl px-4 sm:px-6">
-        <h2 className="text-2xl font-bold">{t('secciones.contacto')}</h2>
-        <ul className="mt-6 space-y-2">
-          <li>
-            <a
-              href={`mailto:${cv.email}`}
-              className="transition-colors hover:text-sky-500"
-            >
-              {cv.email}
-            </a>
-          </li>
-          <li>
-            <a
-              href={`tel:${cv.telefono.replace(/\s/g, '')}`}
-              className="transition-colors hover:text-sky-500"
-            >
-              {cv.telefono}
-            </a>
-          </li>
-          <li>{cv.ubicacion}</li>
-        </ul>
-
-        <h3 className="mt-8 font-semibold">{t('secciones.idiomas')}</h3>
-        <ul className="mt-3 flex flex-wrap gap-4 text-sm text-slate-600 dark:text-slate-300">
-          {cv.idiomas.map((i) => (
-            <li key={i.nombre}>
-              {i.nombre} — {i.nivel}
-            </li>
-          ))}
-        </ul>
-
-        <p className="mt-10 text-xs text-slate-500 dark:text-slate-400">
-          {t('footer.hechoCon')} · © {new Date().getFullYear()}
-        </p>
+      <div className="mx-auto flex max-w-[780px] flex-wrap items-center justify-between gap-x-6 gap-y-2 px-6">
+        <a
+          href={`mailto:${cv.email}`}
+          className="text-phos transition-colors hover:underline"
+        >
+          {cv.email}
+        </a>
+        <span>
+          {cv.telefono} · {cv.ubicacion}
+        </span>
+        <span>{cv.idiomas.map((i) => `${i.nombre} (${i.nivel})`).join(' · ')}</span>
       </div>
+      <p className="mx-auto mt-6 max-w-[780px] px-6 text-[11px] text-line">
+        [ {t('footer.fin')} ]
+      </p>
     </footer>
   )
 }

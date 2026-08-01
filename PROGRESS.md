@@ -14,6 +14,7 @@ Plan: ver `PLAN.md`. Convención: un commit de git por fase completada + actuali
 | 4 | Interactividad: reveal on scroll, filtros skills, vista print/PDF | ✅ Completada |
 | 5 | Tests (Vitest + RTL), accesibilidad, responsive | ✅ Completada |
 | 6 | Build producción + deploy VPS (método pendiente) + README | ✅ Completada (deploy VPS ⬜ pendiente decisión) |
+| 7 | Rediseño anti-AI-slop: tema Registry/Manpage (B), scroll-spy, contenido real | ✅ Completada |
 
 ## Historial de fases
 

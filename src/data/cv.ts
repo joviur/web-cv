@@ -8,9 +8,8 @@ export const cv: CvData = {
   telefono: '[telefono eliminado]',
   resumen:
     'Titulado en Administración de Sistemas Informáticos en Red (ASIR). ' +
-    'Software Engineer con experiencia en automatización y orquestación de ' +
-    'procesos (Control-M), desarrollo RPA con Python y administración de ' +
-    'sistemas Linux y Windows.',
+    'Automatización y orquestación de procesos con Control-M, desarrollo RPA ' +
+    'con Python y administración de sistemas Linux y Windows.',
   experiencia: [
     {
       empresa: 'NTT DATA',
@@ -83,11 +82,10 @@ export const cv: CvData = {
     { nombre: 'Control-M', categoria: 'Automatización' },
     { nombre: 'Orquestación de procesos', categoria: 'Automatización' },
     { nombre: 'Transferencia de ficheros', categoria: 'Automatización' },
-    // Soft skills
-    { nombre: 'Trabajo en equipo', categoria: 'Soft skills' },
-    { nombre: 'Aprendizaje rápido', categoria: 'Soft skills' },
-    { nombre: 'Autogestión', categoria: 'Soft skills' },
-    { nombre: 'Autodidacta', categoria: 'Soft skills' },
+    // Soft skills — reformuladas como evidencia (anti-copy genérico)
+    { nombre: 'Soporte a usuarios y operaciones en equipo', categoria: 'Soft skills' },
+    { nombre: 'Responsable de informática (Azaconsa)', categoria: 'Soft skills' },
+    { nombre: 'RPA y LowCode aprendidos en puesto', categoria: 'Soft skills' },
   ],
   educacion: [
     {

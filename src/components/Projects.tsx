@@ -8,20 +8,21 @@ export function Projects() {
   if (cv.proyectos.length === 0) return null
 
   return (
-    <section id="proyectos" className="py-16">
-      <h2 className="mb-8 text-2xl font-bold">{t('secciones.proyectos')}</h2>
-      <div className="grid gap-6 sm:grid-cols-2">
+    <section id="proyectos" className="py-10">
+      <p className="text-[13px] uppercase tracking-[0.18em] text-amber">
+        ## 04 · {t('secciones.proyectos')}
+      </p>
+      <div className="mb-2 border-b border-line" aria-hidden="true" />
+      <div>
         {cv.proyectos.map((p) => (
-          <article
+          <div
             key={p.nombre}
-            className="rounded-xl border border-slate-200 p-5 dark:border-slate-800"
+            className="border-b border-line px-1 py-3 text-[13px]"
           >
-            <h3 className="font-bold">{p.nombre}</h3>
-            <p className="mt-2 text-sm">{p.descripcion}</p>
-            <p className="mt-3 text-xs text-slate-500">
-              {p.tecnologias.join(' · ')}
-            </p>
-          </article>
+            <h3 className="text-[15px] font-bold">{p.nombre}</h3>
+            <p className="mt-1 text-muted">{p.descripcion}</p>
+            <p className="mt-1 text-[11px] text-muted">{p.tecnologias.join(' · ')}</p>
+          </div>
         ))}
       </div>
     </section>

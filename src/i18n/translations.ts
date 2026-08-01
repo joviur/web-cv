@@ -2,16 +2,12 @@ export type Lang = 'es' | 'en'
 
 export interface Translation {
   nav: {
-    sobreMi: string
     experiencia: string
     skills: string
     educacion: string
-    proyectos: string
     contacto: string
   }
-  hero: { ctaExperiencia: string; ctaContacto: string }
   secciones: {
-    sobreMi: string
     experiencia: string
     skills: string
     educacion: string
@@ -19,27 +15,20 @@ export interface Translation {
     idiomas: string
     contacto: string
   }
-  skills: { todos: string; filtro: string }
-  footer: { hechoCon: string }
+  skills: { todos: string }
+  footer: { fin: string }
 }
 
 export const translations: Record<Lang, Partial<Translation>> = {
   es: {
     nav: {
-      sobreMi: 'Sobre mí',
-      experiencia: 'Experiencia',
-      skills: 'Habilidades',
-      educacion: 'Educación',
-      proyectos: 'Proyectos',
-      contacto: 'Contacto',
-    },
-    hero: {
-      ctaExperiencia: 'Ver experiencia',
-      ctaContacto: 'Contactar',
+      experiencia: 'experiencia',
+      skills: 'habilidades',
+      educacion: 'educación',
+      contacto: 'contacto',
     },
     secciones: {
-      sobreMi: 'Sobre mí',
-      experiencia: 'Experiencia profesional',
+      experiencia: 'Experiencia',
       skills: 'Habilidades',
       educacion: 'Educación',
       proyectos: 'Proyectos',
@@ -47,10 +36,9 @@ export const translations: Record<Lang, Partial<Translation>> = {
       contacto: 'Contacto',
     },
     skills: {
-      todos: 'Todos',
-      filtro: 'Filtrar por categoría',
+      todos: 'todos',
     },
-    footer: { hechoCon: 'Hecho con React + Tailwind CSS' },
+    footer: { fin: 'fin del fichero' },
   },
   // TODO(i18n): completar traducción al inglés cuando se implemente.
   // Mientras tanto, todo resuelve con fallback a español.

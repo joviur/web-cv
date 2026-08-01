@@ -6,26 +6,29 @@ import { useInView } from '../hooks/useInView'
 
 type Filtro = CategoriaSkill | 'Todos'
 
-const categorias: Filtro[] = [
-  'Todos',
-  'Desarrollo',
-  'Sistemas',
-  'Automatización',
-  'Soft skills',
+const categorias: { key: Filtro; label: string }[] = [
+  { key: 'Todos', label: 'todos' },
+  { key: 'Desarrollo', label: 'desarrollo' },
+  { key: 'Sistemas', label: 'sistemas' },
+  { key: 'Automatización', label: 'automatización' },
+  { key: 'Soft skills', label: 'soft' },
 ]
 
-function SkillBadge({ nombre }: { nombre: string }) {
-  const { ref, inView } = useInView<HTMLSpanElement>()
+function SkillRow({ nombre, categoria }: { nombre: string; categoria: CategoriaSkill }) {
+  const { ref, inView } = useInView<HTMLDivElement>()
   return (
-    <span
+    <div
       ref={ref}
       data-inview={inView}
-      className={`rounded-full border px-3 py-1 text-sm transition-all duration-500 ${
-        inView ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'
-      } border-slate-200 hover:border-sky-500 dark:border-slate-700`}
+      className={`flex items-baseline justify-between gap-4 border-b border-line px-1 py-2 text-[13px] transition-all duration-500 ${
+        inView ? 'translate-y-0 opacity-100' : 'translate-y-1 opacity-0'
+      }`}
     >
-      {nombre}
-    </span>
+      <span>{nombre}</span>
+      <span className="shrink-0 text-[10px] uppercase tracking-[0.1em] text-muted">
+        {categoria}
+      </span>
+    </div>
   )
 }
 
@@ -39,34 +42,36 @@ export function Skills() {
       : cv.skills.filter((s) => s.categoria === filtro)
 
   return (
-    <section id="skills" className="py-16">
-      <h2 className="mb-6 text-2xl font-bold">{t('secciones.skills')}</h2>
+    <section id="skills" className="py-10">
+      <p className="text-[13px] uppercase tracking-[0.18em] text-amber">
+        ## 02 · {t('secciones.skills')}
+      </p>
+      <div className="mb-2 border-b border-line" aria-hidden="true" />
 
-      <div className="no-print mb-6 flex flex-wrap items-center gap-2">
-        <span className="text-xs text-slate-500">{t('skills.filtro')}</span>
+      <div className="no-print flex flex-wrap gap-2 py-3">
         {categorias.map((c) => (
           <button
-            key={c}
-            onClick={() => setFiltro(c)}
-            aria-pressed={filtro === c}
-            className={`rounded-full border px-3 py-1 text-xs transition-colors ${
-              filtro === c
-                ? 'border-sky-500 bg-sky-500 text-white'
-                : 'hover:border-sky-500'
+            key={c.key}
+            onClick={() => setFiltro(c.key)}
+            aria-pressed={filtro === c.key}
+            className={`border px-2.5 py-1 text-xs transition-colors ${
+              filtro === c.key
+                ? 'border-phos bg-phos text-base'
+                : 'border-line text-muted hover:border-phos hover:text-phos'
             }`}
           >
-            {c === 'Todos' ? t('skills.todos') : c}
+            [ {c.label} ]
           </button>
         ))}
       </div>
 
       <p aria-live="polite" className="sr-only">
-        {visibles.length} habilidades visibles
+        {visibles.length} resultados
       </p>
 
-      <div className="flex flex-wrap gap-2">
+      <div>
         {visibles.map((s) => (
-          <SkillBadge key={s.nombre} nombre={s.nombre} />
+          <SkillRow key={s.nombre} nombre={s.nombre} categoria={s.categoria} />
         ))}
       </div>
     </section>

@@ -18,21 +18,21 @@ describe('Skills', () => {
 
     expect(screen.getByText('Python')).toBeInTheDocument()
 
-    await user.click(screen.getByRole('button', { name: 'Sistemas' }))
+    await user.click(screen.getByRole('button', { name: '[ sistemas ]' }))
 
     expect(screen.queryByText('Python')).not.toBeInTheDocument()
     expect(screen.getByText('Linux')).toBeInTheDocument()
     expect(screen.getByText('Windows Server')).toBeInTheDocument()
   })
 
-  it('vuelve a mostrar todo con el filtro Todos', async () => {
+  it('vuelve a mostrar todo con el filtro todos', async () => {
     const user = userEvent.setup()
     renderSkills()
 
-    await user.click(screen.getByRole('button', { name: 'Desarrollo' }))
+    await user.click(screen.getByRole('button', { name: '[ desarrollo ]' }))
     expect(screen.queryByText('Linux')).not.toBeInTheDocument()
 
-    await user.click(screen.getByRole('button', { name: 'Todos' }))
+    await user.click(screen.getByRole('button', { name: '[ todos ]' }))
     expect(screen.getByText('Linux')).toBeInTheDocument()
     expect(screen.getByText('Python')).toBeInTheDocument()
   })

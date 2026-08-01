@@ -5,23 +5,30 @@ import { useDarkMode } from './useDarkMode'
 describe('useDarkMode', () => {
   beforeEach(() => {
     localStorage.clear()
-    document.documentElement.classList.remove('dark')
+    document.documentElement.classList.remove('light')
   })
 
-  it('aplica dark si está guardado en localStorage', () => {
-    localStorage.setItem('theme', 'dark')
-    renderHook(() => useDarkMode())
-    expect(document.documentElement.classList.contains('dark')).toBe(true)
-  })
-
-  it('el toggle cambia el tema', () => {
+  it('default: tema dark sin clase light', () => {
     const { result } = renderHook(() => useDarkMode())
-    expect(document.documentElement.classList.contains('dark')).toBe(false)
+    expect(result.current[0]).toBe(false)
+    expect(document.documentElement.classList.contains('light')).toBe(false)
+  })
+
+  it('aplica light si está guardado en localStorage', () => {
+    localStorage.setItem('theme', 'light')
+    renderHook(() => useDarkMode())
+    expect(document.documentElement.classList.contains('light')).toBe(true)
+  })
+
+  it('el toggle cambia el tema y lo persiste', () => {
+    const { result } = renderHook(() => useDarkMode())
 
     act(() => result.current[1]())
-    expect(document.documentElement.classList.contains('dark')).toBe(true)
+    expect(document.documentElement.classList.contains('light')).toBe(true)
+    expect(localStorage.getItem('theme')).toBe('light')
 
     act(() => result.current[1]())
-    expect(document.documentElement.classList.contains('dark')).toBe(false)
+    expect(document.documentElement.classList.contains('light')).toBe(false)
+    expect(localStorage.getItem('theme')).toBe('dark')
   })
 })

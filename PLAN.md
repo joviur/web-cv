@@ -959,3 +959,31 @@ Transferencia: `rsync`/`scp` de `dist/` al VPS (puerto 22222, clave ed25519). Po
 - [ ] Fase 5: tests + a11y (commit)
 - [ ] Fase 6: build + deploy VPS + README (commit)
 - [ ] PROGRESS.md actualizado en cada fase
+
+
+---
+
+## Fase 7 (añadida) — Rediseño anti-AI-slop
+
+**Contexto:** el diseño original mostraba los "tells" clásicos de salida AI (sky-500,
+cards redondeadas, pills, emojis, copy genérica, fuente system).
+
+**Investigación (fuentes):** Claude Cookbook "Frontend Aesthetics" (evitar Inter/Roboto/
+Space Grotesk, azul/púrpura, layout promedio), 925studios "AI Slop Web Design Guide"
+(contención: Linear/Stripe son distintivos por lo que quitan), axe-web "Why AI Websites
+All Look the Same" (la media estadística del entrenamiento), alexlavaee (model collapse,
+la iteración humana es irremplazable).
+
+**Decisión del usuario:** Variante B — **Registry/Manpage** (dark-first, JetBrains Mono,
+tokens sin azul, prompts de terminal, filtros `[ todos ]`). Mockups comparativos en
+`sketches/` (A descartada, B promovida a producción).
+
+**Cambios clave:**
+- `src/index.css`: tokens `@theme` (base/panel/ink/muted/line/phos/amber) + override `.light`
+- `useDarkMode`: gestiona clase `light` (dark-first), persistencia localStorage
+- `Navbar`: barra TUI + nav `~/seccion` + scroll-spy (IntersectionObserver)
+- `Hero`: `whoami` / `cat cv.txt` con cursor blink; Sobre mí fusionado (About.tsx eliminado)
+- `Experience/Education`: filas tipo registro, fechas en columna meta, badge ACTUAL
+- `Skills`: filas con categoría + filtros `[ todos ] [ desarrollo ] [ sistemas ] [ automatización ] [ soft ]`
+- Soft skills reformuladas como evidencia; `translations` sin claves huérfanas
+- Tests actualizados (IntersectionObserver mockeado en `src/test/setup.ts`)

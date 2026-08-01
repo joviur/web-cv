@@ -6,15 +6,16 @@ export function Experience() {
   const { t } = useLang()
 
   return (
-    <section id="experiencia" className="py-16">
-      <h2 className="mb-8 text-2xl font-bold">
-        {t('secciones.experiencia')}
-      </h2>
-      <ol className="relative space-y-10 border-l border-slate-200 pl-6 dark:border-slate-800">
+    <section id="experiencia" className="py-10">
+      <p className="text-[13px] uppercase tracking-[0.18em] text-amber">
+        ## 01 · {t('secciones.experiencia')}
+      </p>
+      <div className="mb-2 border-b border-line" aria-hidden="true" />
+      <ul>
         {cv.experiencia.map((exp) => (
           <ExperienceItem key={exp.empresa + exp.desde} exp={exp} />
         ))}
-      </ol>
+      </ul>
     </section>
   )
 }

@@ -1,49 +1,31 @@
 import { cv } from '../data/cv'
-import { useLang } from '../context/LanguageContext'
 
 export function Hero() {
-  const { t } = useLang()
-  const badges = cv.skills
-    .filter((s) => s.categoria !== 'Soft skills')
-    .slice(0, 6)
-    .map((s) => s.nombre)
+  const actual = cv.experiencia.find((e) => e.actual) ?? cv.experiencia[0]
 
   return (
-    <section id="inicio" className="py-20 sm:py-28">
-      <p className="text-sm uppercase tracking-widest text-sky-500">
-        {cv.ubicacion}
+    <section id="inicio" className="py-16">
+      <p className="text-[13px] text-muted">
+        <b className="font-medium text-phos">josema@dev</b>
+        <span className="text-amber">:~</span>$ whoami
       </p>
-      <h1 className="mt-4 text-4xl font-bold sm:text-5xl">{cv.nombre}</h1>
-      <p className="mt-2 text-xl text-slate-600 dark:text-slate-300">
-        {cv.titulo}
+      <h1 className="mt-5 text-[clamp(30px,5.4vw,46px)] font-bold leading-tight tracking-tight">
+        José María Vizcaíno
+        <span
+          className="cursor-blink ml-1 inline-block h-[1.05em] w-[11px] bg-phos align-[-2px]"
+          aria-hidden="true"
+        />
+      </h1>
+      <p className="mt-3 text-[13px] font-medium text-phos">
+        {cv.titulo} @ {actual.empresa}
       </p>
-      <p className="mt-6 max-w-xl text-slate-600 dark:text-slate-400">
+      <p className="mt-5 text-[13px] leading-relaxed text-muted">
+        <b className="font-medium text-phos">josema@dev</b>
+        <span className="text-amber">:~</span>$ cat cv.txt
+      </p>
+      <p className="mt-3 max-w-[46em] text-[13px] leading-relaxed text-muted">
         {cv.resumen}
       </p>
-      <div className="mt-6 flex flex-wrap gap-2">
-        {badges.map((b) => (
-          <span
-            key={b}
-            className="rounded-full border border-slate-200 px-3 py-1 text-sm dark:border-slate-700"
-          >
-            {b}
-          </span>
-        ))}
-      </div>
-      <div className="mt-8 flex flex-wrap gap-3">
-        <a
-          href="#experiencia"
-          className="rounded-lg bg-sky-500 px-4 py-2 text-white transition-colors hover:bg-sky-600"
-        >
-          {t('hero.ctaExperiencia')}
-        </a>
-        <a
-          href={`mailto:${cv.email}`}
-          className="rounded-lg border border-slate-300 px-4 py-2 transition-colors hover:border-sky-500 dark:border-slate-700"
-        >
-          {t('hero.ctaContacto')}
-        </a>
-      </div>
     </section>
   )
 }

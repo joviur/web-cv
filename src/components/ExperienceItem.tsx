@@ -8,33 +8,38 @@ export function ExperienceItem({ exp }: { exp: Experiencia }) {
     <li
       ref={ref}
       data-inview={inView}
-      className={`relative transition-all duration-700 ${
-        inView ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
+      className={`grid gap-1 border-b border-line py-4 transition-all duration-700 sm:grid-cols-[150px_1fr] sm:gap-5 ${
+        inView ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'
       }`}
     >
-      <span
-        className="absolute -left-[30px] top-1 h-3 w-3 rounded-full bg-sky-500"
-        aria-hidden="true"
-      />
-      <article>
-        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-          <h3 className="text-lg font-bold">{exp.empresa}</h3>
+      <div className="text-xs leading-relaxed text-muted">
+        {exp.desde} — {exp.hasta}
+        <br />
+        {exp.empresa}
+      </div>
+      <div>
+        <h3 className="text-[15px] font-bold">
+          {exp.puesto}
           {exp.actual && (
-            <span className="rounded-full bg-sky-500/15 px-2 py-0.5 text-xs font-medium text-sky-600 dark:text-sky-400">
-              Actualidad
-            </span>
+            <>
+              {' '}
+              <span className="bg-phos px-1.5 py-0.5 align-middle text-[10px] font-medium text-base">
+                ACTUAL
+              </span>
+            </>
           )}
-        </div>
-        <p className="text-slate-600 dark:text-slate-300">{exp.puesto}</p>
-        <p className="text-xs text-slate-500">
-          {exp.desde} — {exp.hasta}
-        </p>
-        <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-slate-600 dark:text-slate-300">
+        </h3>
+        <ul className="mt-2 list-none">
           {exp.logros.map((l) => (
-            <li key={l}>{l}</li>
+            <li key={l} className="py-0.5 text-[13px] leading-relaxed">
+              <span className="text-phos" aria-hidden="true">
+                »{' '}
+              </span>
+              {l}
+            </li>
           ))}
         </ul>
-      </article>
+      </div>
     </li>
   )
 }

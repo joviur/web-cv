@@ -1,18 +1,20 @@
 import { useEffect, useState } from 'react'
 
-/** Dark mode con persistencia en localStorage y respeto a prefers-color-scheme. */
+/**
+ * Tema del sitio (dark-first). Devuelve [light, toggleLight].
+ * - Default: dark (sin clase en <html>)
+ * - light: añade la clase `light` (los tokens de color se reasignan en CSS)
+ * - Persistencia en localStorage
+ */
 export function useDarkMode(): [boolean, () => void] {
-  const [dark, setDark] = useState<boolean>(() => {
-    const saved = localStorage.getItem('theme')
-    if (saved === 'dark') return true
-    if (saved === 'light') return false
-    return window.matchMedia('(prefers-color-scheme: dark)').matches
-  })
+  const [light, setLight] = useState<boolean>(
+    () => localStorage.getItem('theme') === 'light',
+  )
 
   useEffect(() => {
-    document.documentElement.classList.toggle('dark', dark)
-    localStorage.setItem('theme', dark ? 'dark' : 'light')
-  }, [dark])
+    document.documentElement.classList.toggle('light', light)
+    localStorage.setItem('theme', light ? 'light' : 'dark')
+  }, [light])
 
-  return [dark, () => setDark((d) => !d)]
+  return [light, () => setLight((l) => !l)]
 }

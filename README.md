@@ -6,9 +6,10 @@ Construida con Vite + React + TypeScript + Tailwind CSS v4.
 ## ✨ Características
 
 - One-page con scroll suave y navbar sticky
-- Timeline de experiencia animado (reveal on scroll)
-- Filtros de habilidades por categoría
-- Tema dark/light con persistencia en `localStorage`
+- **Estética Registry/Manpage** (dark-first, JetBrains Mono) — diseñada a propósito para evitar el "look AI" (sin azul por defecto, sin cards genéricas, sin emojis)
+- Scroll-spy: la navbar marca la sección activa (`~/experiencia`, `~/habilidades`, …)
+- Filtros de habilidades por categoría (`[ todos ] [ desarrollo ] …`)
+- Tema dark/light con persistencia en `localStorage` (dark por defecto)
 - Botón **PDF** → vista de impresión limpia (`@media print`)
 - i18n preparado: botón ES/EN con fallback a español (traducción EN pendiente)
 - Sección de proyectos oculta hasta que haya proyectos que mostrar
