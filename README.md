@@ -1,32 +1,62 @@
-# React + TypeScript + Vite
+# Web CV — José María Vizcaíno
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Web interactiva one-page con el CV de José María Vizcaíno (Software Engineer).
+Construida con Vite + React + TypeScript + Tailwind CSS v4.
 
-Currently, two official plugins are available:
+## ✨ Características
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- One-page con scroll suave y navbar sticky
+- Timeline de experiencia animado (reveal on scroll)
+- Filtros de habilidades por categoría
+- Tema dark/light con persistencia en `localStorage`
+- Botón **PDF** → vista de impresión limpia (`@media print`)
+- i18n preparado: botón ES/EN con fallback a español (traducción EN pendiente)
+- Sección de proyectos oculta hasta que haya proyectos que mostrar
+- Accesible: `prefers-reduced-motion`, `aria-pressed`/`aria-live`, jerarquía de headings
 
-## React Compiler
+## 🚀 Desarrollo
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+pnpm install   # dependencias (pnpm, nunca npm)
+pnpm dev       # dev server en http://localhost:5173
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## 🧪 Tests
+
+```bash
+pnpm test          # suite completa (Vitest + Testing Library)
+pnpm test:watch    # modo watch
+```
+
+## 📝 Actualizar el CV
+
+**Un solo archivo:** `src/data/cv.ts` — contiene nombre, resumen, experiencia,
+habilidades, educación, idiomas y proyectos. La UI se adapta sola.
+
+- Añadir un proyecto → aparece la sección "Proyectos" automáticamente.
+- Traducción EN → rellenar `translations.en` en `src/i18n/translations.ts`.
+
+## 🏗️ Build de producción
+
+```bash
+pnpm build    # → dist/
+pnpm preview  # servir dist/ localmente
+```
+
+## 🖥️ Deploy (VPS)
+
+Ver `deploy.sh` — requiere elegir el método de servir (`nginx` / `caddy` /
+contenedor podman / solo acceso Tailscale) y, si se expone al público, abrir
+puertos 80/443 en el firewall. La decisión está pendiente (ver `PROGRESS.md`).
+
+## 🗂️ Estructura
+
+```
+src/
+├── data/cv.ts              # ⭐ contenido del CV (única fuente de verdad)
+├── types/cv.ts             # interfaces del modelo
+├── i18n/translations.ts    # diccionarios es/en
+├── context/LanguageContext.tsx
+├── hooks/                  # useDarkMode, useInView
+└── components/             # Navbar, Hero, About, Experience, Skills, Education, Projects, Footer, PrintButton
+```

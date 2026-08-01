@@ -13,7 +13,7 @@ Plan: ver `PLAN.md`. Convención: un commit de git por fase completada + actuali
 | 3 | Secciones: sobre mí, experiencia (timeline), skills, educación, proyectos | ✅ Completada |
 | 4 | Interactividad: reveal on scroll, filtros skills, vista print/PDF | ✅ Completada |
 | 5 | Tests (Vitest + RTL), accesibilidad, responsive | ✅ Completada |
-| 6 | Build producción + deploy VPS (método pendiente) + README | ⬜ Pendiente |
+| 6 | Build producción + deploy VPS (método pendiente) + README | ✅ Completada (deploy VPS ⬜ pendiente decisión) |
 
 ## Historial de fases
 
