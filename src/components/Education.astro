@@ -1,0 +1,25 @@
+---
+import { cv } from '../data/cv'
+import { t } from '../i18n/translations'
+---
+
+<section id="educacion" class="py-10">
+  <h2 class="text-[13px] uppercase tracking-[0.18em] text-amber">
+    ## 03 · {t('secciones.educacion')}
+  </h2>
+  <div class="mb-2 border-b border-line" aria-hidden="true"></div>
+
+  <div data-reveal>
+    {
+      cv.educacion.map((e) => (
+        <div class="grid gap-1 border-b border-line py-4 sm:grid-cols-[150px_1fr] sm:gap-5">
+          <span class="text-xs text-phos">{e.anio}</span>
+          <div>
+            <h3 class="text-[15px] font-bold">{e.titulo}</h3>
+            <p class="mt-1 text-sm text-muted">{e.centro}</p>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</section>

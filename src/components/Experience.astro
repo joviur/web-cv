@@ -1,0 +1,19 @@
+---
+import { cv } from '../data/cv'
+import { t } from '../i18n/translations'
+import ExperienceItem from './ExperienceItem.astro'
+---
+
+<section id="experiencia" class="py-10">
+  <h2 class="text-[13px] uppercase tracking-[0.18em] text-amber">
+    ## 01 · {t('secciones.experiencia')}
+  </h2>
+  <div class="mb-2 border-b border-line" aria-hidden="true"></div>
+  <ul>
+    {
+      cv.experiencia.map((exp) => (
+        <ExperienceItem exp={exp} />
+      ))
+    }
+  </ul>
+</section>

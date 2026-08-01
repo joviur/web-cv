@@ -1,0 +1,97 @@
+---
+import { cv } from '../data/cv'
+import { t } from '../i18n/translations'
+import type { CategoriaSkill } from '../types/cv'
+import { filtrarSkills, type FiltroSkill } from '../lib/skills'
+
+const categorias: { key: FiltroSkill; label: string }[] = [
+  { key: 'Todos', label: 'skills.todos' },
+  { key: 'Desarrollo', label: 'skills.desarrollo' },
+  { key: 'Sistemas', label: 'skills.sistemas' },
+  { key: 'Automatización', label: 'skills.automatizacion' },
+  { key: 'Soft skills', label: 'skills.soft' },
+]
+
+// Estado inicial: "Todos" (build-time; el filtrado en cliente re-usa filtrarSkills)
+const skills = filtrarSkills(cv.skills, 'Todos')
+const total = skills.length
+---
+
+<section id="skills" class="py-10">
+  <h2 class="text-[13px] uppercase tracking-[0.18em] text-amber">
+    ## 02 · {t('secciones.skills')}
+  </h2>
+  <div class="mb-2 border-b border-line" aria-hidden="true"></div>
+
+  <div class="no-print flex flex-wrap gap-2 py-3" id="skill-filters">
+    {
+      categorias.map((c) => (
+        <button
+          type="button"
+          data-filtro={c.key}
+          aria-pressed={c.key === 'Todos'}
+          class={`border px-2.5 py-1 text-xs transition-colors ${
+            c.key === 'Todos'
+              ? 'border-phos bg-phos text-base'
+              : 'border-line text-muted hover:border-phos hover:text-phos'
+          }`}
+        >
+          [ {t(c.label)} ]
+        </button>
+      ))
+    }
+  </div>
+
+  <p aria-live="polite" class="sr-only" id="skill-live">{total} {t('skills.resultados')}</p>
+
+  <div id="skill-list">
+    {
+      skills.map((s) => (
+        <div
+          data-reveal
+          data-categoria={s.categoria}
+          class="flex items-baseline justify-between gap-4 border-b border-line px-1 py-2 text-sm"
+        >
+          <span>{s.nombre}</span>
+          <span class="shrink-0 text-[10px] uppercase tracking-[0.1em] text-muted">
+            {s.categoria}
+          </span>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<script>
+  import { t } from '../i18n/translations'
+
+  const live = document.getElementById('skill-live')
+  const rows = [...document.querySelectorAll<HTMLElement>('#skill-list [data-categoria]')]
+  const buttons = [...document.querySelectorAll<HTMLButtonElement>('#skill-filters button')]
+
+  const applyFilter = (filtro: string) => {
+    const visibles = rows.filter((r) => {
+      const cat = r.dataset.categoria ?? 'Todos'
+      return filtro === 'Todos' || cat === filtro
+    })
+    for (const r of rows) r.hidden = !visibles.includes(r)
+    const n = visibles.length
+    live!.textContent = n === 1 ? `1 ${t('skills.resultado')}` : `${n} ${t('skills.resultados')}`
+  }
+
+  for (const b of buttons) {
+    b.addEventListener('click', () => {
+      const filtro = b.dataset.filtro ?? 'Todos'
+      for (const x of buttons) {
+        const on = x === b
+        x.setAttribute('aria-pressed', String(on))
+        x.classList.toggle('border-phos', on)
+        x.classList.toggle('bg-phos', on)
+        x.classList.toggle('text-base', on)
+        x.classList.toggle('border-line', !on)
+        x.classList.toggle('text-muted', !on)
+      }
+      applyFilter(filtro)
+    })
+  }
+</script>

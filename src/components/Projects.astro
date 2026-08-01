@@ -1,0 +1,27 @@
+---
+import { cv } from '../data/cv'
+import { t } from '../i18n/translations'
+---
+
+<!-- Sección oculta hasta que haya proyectos que mostrar -->
+{
+  cv.proyectos.length > 0 && (
+    <section id="proyectos" class="py-10">
+      <h2 class="text-[13px] uppercase tracking-[0.18em] text-amber">
+        ## 04 · {t('secciones.proyectos')}
+      </h2>
+      <div class="mb-2 border-b border-line" aria-hidden="true"></div>
+      <div>
+        {
+          cv.proyectos.map((p) => (
+            <div class="border-b border-line px-1 py-3 text-sm">
+              <h3 class="text-[15px] font-bold">{p.nombre}</h3>
+              <p class="mt-1 text-muted">{p.descripcion}</p>
+              <p class="mt-1 text-[11px] text-muted">{p.tecnologias.join(' · ')}</p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+  )
+}

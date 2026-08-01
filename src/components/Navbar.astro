@@ -1,0 +1,122 @@
+---
+import { t } from '../i18n/translations'
+
+const SECTION_IDS = ['experiencia', 'skills', 'educacion', 'contacto']
+
+const links = [
+  ['#experiencia', t('nav.experiencia')],
+  ['#skills', t('nav.skills')],
+  ['#educacion', t('nav.educacion')],
+  ['#contacto', t('nav.contacto')],
+] as const
+---
+
+<header class="no-print sticky top-0 z-50">
+  <div class="mx-auto max-w-[780px] px-6">
+    <!-- Barra tipo TUI -->
+    <div class="flex items-center justify-between gap-3 border border-t-0 border-line bg-panel px-4 py-2 text-xs text-muted">
+      <span class="flex min-w-0 items-center gap-3">
+        <span class="flex shrink-0 gap-1.5" aria-hidden="true">
+          <span class="h-2.5 w-2.5 rounded-full bg-[#e4572e]"></span>
+          <span class="h-2.5 w-2.5 rounded-full bg-amber"></span>
+          <span class="h-2.5 w-2.5 rounded-full bg-phos"></span>
+        </span>
+        <span class="truncate">josema@dev — web-cv</span>
+      </span>
+      <span class="flex shrink-0 items-center gap-2">
+        <!-- TODO(i18n): botón de idioma oculto hasta que exista translations.en -->
+        <button
+          id="theme-toggle"
+          class="flex items-center border border-line px-2 py-0.5 text-[11px] text-muted transition-colors hover:border-phos hover:text-phos"
+          aria-label="Cambiar tema"
+        >
+          <svg id="icon-sun" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+            <circle cx="8" cy="8" r="3"></circle>
+            <path d="M8 1v2M8 13v2M1 8h2M13 8h2M3 3l1.5 1.5M11.5 11.5L13 13M13 3l-1.5 1.5M4.5 11.5L3 13"></path>
+          </svg>
+          <svg id="icon-moon" viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true" class="hidden">
+            <path d="M13.4 9.6A5.6 5.6 0 1 1 6.4 2.6a4.2 4.2 0 0 0 7 7z"></path>
+          </svg>
+        </button>
+        <button
+          id="print-btn"
+          class="flex items-center gap-1.5 border border-line px-2 py-0.5 text-[11px] text-muted transition-colors hover:border-phos hover:text-phos"
+          aria-label="Descargar CV en PDF"
+        >
+          <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">
+            <path d="M8 2v8M4.5 7.5 8 11l3.5-3.5M2.5 13.5h11"></path>
+          </svg>
+          [PDF]
+        </button>
+      </span>
+    </div>
+    <!-- Navegación -->
+    <nav aria-label="Principal" class="flex flex-wrap gap-x-6 border-b border-line bg-base px-1 py-2 text-xs">
+      {
+        links.map(([href, label]) => (
+          <a
+            href={href}
+            data-spy={href.slice(1)}
+            class="transition-colors text-muted hover:text-phos"
+          >
+            ~/{label}
+          </a>
+        ))
+      }
+    </nav>
+  </div>
+</header>
+
+<script>
+  // === Tema (light-first) ===
+  const root = document.documentElement
+  const toggle = document.getElementById('theme-toggle')
+  const iconSun = document.getElementById('icon-sun')
+  const iconMoon = document.getElementById('icon-moon')
+
+  const syncIcons = () => {
+    iconSun?.classList.toggle('hidden', root.classList.contains('dark'))
+    iconMoon?.classList.toggle('hidden', !root.classList.contains('dark'))
+  }
+  syncIcons()
+
+  toggle?.addEventListener('click', () => {
+    root.classList.toggle('dark')
+    localStorage.setItem('theme', root.classList.contains('dark') ? 'dark' : 'light')
+    syncIcons()
+  })
+
+  // === Botón PDF ===
+  document.getElementById('print-btn')?.addEventListener('click', () => window.print())
+
+  // === Scroll-spy ===
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('nav a[data-spy]')]
+  const setActive = (id: string) => {
+    for (const a of links) {
+      a.classList.toggle('text-phos', a.dataset.spy === id)
+      a.classList.toggle('text-muted', a.dataset.spy !== id)
+    }
+  }
+
+  let atBottom = false
+  const obs = new IntersectionObserver(
+    (entries) => {
+      if (atBottom) return
+      for (const e of entries) {
+        if (e.isIntersecting) setActive((e.target as HTMLElement).id)
+      }
+    },
+    { rootMargin: '-35% 0px -50% 0px' },
+  )
+  for (const id of ['experiencia', 'skills', 'educacion', 'contacto']) {
+    const el = document.getElementById(id)
+    if (el) obs.observe(el)
+  }
+  // El footer (#contacto) no alcanza la banda central: marcar al llegar al fondo
+  const onScroll = () => {
+    const doc = document.documentElement
+    atBottom = window.innerHeight + window.scrollY >= doc.scrollHeight - 8
+    if (atBottom) setActive('contacto')
+  }
+  window.addEventListener('scroll', onScroll, { passive: true })
+</script>
