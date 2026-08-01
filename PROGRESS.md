@@ -21,6 +21,13 @@ Plan: ver `PLAN.md`. Convención: un commit de git por fase completada + actuali
 
 ## Historial de fases
 
+### Fix — Filtros skills: texto invisible en hover (2026-08-01)
+Bug: al activar un filtro de habilidades y pasar el puntero por encima, las letras del botón desaparecían.
+- **Causa**: el handler de click añadía `bg-phos`/`text-base` al botón activo pero nunca quitaba `hover:text-phos`/`hover:border-phos` de la clase original → en hover el texto se volvía `--color-phos` (#1f7a3d) sobre fondo phos → invisible
+- **Fix**: el botón activo ahora elimina las clases hover (solo los inactivos conservan `hover:border-phos hover:text-phos`), en `src/components/Skills.astro`
+- Verificado en navegador contra `astro preview`: botón activo crema `#f4f3ef` sobre phos (visible), sin clases hover; inactivos recuperan el efecto hover; filtrado y `aria-pressed` intactos; ciclo completo Todos→Desarrollo→Todos OK
+- Tests 7/7, lint 0 errores, build OK
+
 ### Fase 10 — Migración a Astro 5 + JS vanilla (2026-08-01)
 Plan completo en `PLAN-MIGRACION.md`. Resultado medido en producción:
 - HTML estático 19.9 KB (4.7 KB gzip) con **todo el contenido del CV** — FCP sin depender de JS (antes: HTML vacío + 64.3 KB gzip de React)

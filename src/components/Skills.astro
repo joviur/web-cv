@@ -90,6 +90,10 @@ const total = skills.length
         x.classList.toggle('text-base', on)
         x.classList.toggle('border-line', !on)
         x.classList.toggle('text-muted', !on)
+        // El botón activo no debe reaccionar al hover: sin esto,
+        // hover:text-phos pondría texto phos sobre fondo phos (invisible).
+        x.classList.toggle('hover:border-phos', !on)
+        x.classList.toggle('hover:text-phos', !on)
       }
       applyFilter(filtro)
     })
