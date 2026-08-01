@@ -17,8 +17,20 @@ Plan: ver `PLAN.md`. Convención: un commit de git por fase completada + actuali
 | 7 | Rediseño anti-AI-slop: tema Registry/Manpage (B), scroll-spy, contenido real | ✅ Completada |
 | 8 | Review: fixes print, responsive móvil, scroll-spy, i18n filtros, a11y, OG | ✅ Completada |
 | 9 | Light-first + legibilidad (14px, 40em, contraste AA, orden móvil experiencia) | ✅ Completada |
+| 10 | Migración Vite+React → **Astro 5 + JS vanilla** (ver `PLAN-MIGRACION.md`) | ✅ Completada |
 
 ## Historial de fases
+
+### Fase 10 — Migración a Astro 5 + JS vanilla (2026-08-01)
+Plan completo en `PLAN-MIGRACION.md`. Resultado medido en producción:
+- HTML estático 19.9 KB (4.7 KB gzip) con **todo el contenido del CV** — FCP sin depender de JS (antes: HTML vacío + 64.3 KB gzip de React)
+- JS total: **3.2 KB (283 B gzip)** inline, 3 módulos: tema+scroll-spy+print, filtros, reveal
+- CSS: 19.8 KB (4.8 KB gzip) — mismos tokens
+- React eliminado (deps, componentes, hooks, context, tests de render). Sustituido por: `pages/index.astro` + 8 componentes `.astro` + `lib/skills.ts` (función pura testeable)
+- Interactividad vanilla: toggle tema, scroll-spy con atBottom, filtros con aria-pressed/live, reveal con **1 solo IntersectionObserver** + fallback al fondo + guard `html.js` (sin-JS = contenido visible)
+- Verificado en navegador contra `astro preview`: render idéntico, console limpia, tema/filtros/scroll-spy/reveal funcionando, móvil 320/375 sin overflow, print en dark con tokens claros
+- Tests 7/7 (lógica pura, entorno node), lint 0 errores, build 872ms
+- `deploy.sh` sin cambios (sigue generando `dist/`)
 
 ### Fase 9 — Light-first + legibilidad (2026-08-01)
 - **Light-first**: tokens base = tema claro; `html.dark` reasigna a dark (inversión completa: hook, Navbar, App, anti-FOUC, theme-color, tests). Verificado: default light, toggle→dark persistido, print sigue forzando claro en dark mode
