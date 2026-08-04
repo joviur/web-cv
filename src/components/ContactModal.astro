@@ -28,7 +28,7 @@ import { t } from '../i18n/translations'
     <form
       class="modal-form"
       data-contacto-form
-      action="/api/contacto"
+      action="api/contacto"
       method="post"
     >
       <div class="modal-honeypot" aria-hidden="true">
@@ -177,7 +177,7 @@ import { t } from '../i18n/translations'
       estado.innerHTML = `<span class="text-muted">${t('contacto.enviando')}</span>`
       const data = Object.fromEntries(new FormData(form).entries())
       try {
-        const res = await fetch('/api/contacto', {
+        const res = await fetch('api/contacto', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),

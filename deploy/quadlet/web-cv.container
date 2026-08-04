@@ -1,0 +1,16 @@
+# Quadlet (Podman 5.7) — Web estática + Caddy
+# Instalar en ~/.config/containers/systemd/web-cv.container y:
+#   systemctl --user daemon-reload && systemctl --user enable --now web-cv
+[Unit]
+Description=Web CV (Caddy, estáticos + proxy contacto)
+
+[Container]
+Image=docker.io/library/caddy:2-alpine
+ContainerName=web-cv
+# Solo loopback: el túnel de Cloudflare es quien entra
+PublishPort=127.0.0.1:8080:80
+Mount=type=bind,source=/home/joviur/web-cv/dist,target=/srv/cv,ro
+Mount=type=bind,source=/home/joviur/web-cv/Caddyfile,target=/etc/caddy/Caddyfile,ro
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,16 @@
+# Quadlet (Podman 5.7) — Endpoint de contacto
+# Instalar en ~/.config/containers/systemd/contacto-api.container y:
+#   systemctl --user daemon-reload && systemctl --user enable --now contacto-api
+# Requiere: imagen localhost/contacto-api:latest + ~/web-cv-secrets/contacto.env (600)
+[Unit]
+Description=Contacto API (Web CV, Resend)
+
+[Container]
+Image=localhost/contacto-api:latest
+ContainerName=contacto-api
+# Solo loopback, consumido por Caddy
+PublishPort=127.0.0.1:8081:8081
+EnvironmentFile=/home/joviur/web-cv-secrets/contacto.env
+
+[Install]
+WantedBy=default.target
