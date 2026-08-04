@@ -21,7 +21,7 @@ Plan: ver `PLAN.md`. Convención: un commit de git por fase completada + actuali
 | 11 | Animación de tipeo tipo terminal en el hero (ver `SPEC-hero-typing.md` + `PLAN-hero-typing.md`) | ✅ Completada |
 | 12 | Resto de la página oculto durante el boot (ver `SPEC-hero-resto.md`) — codificación con opencode | ✅ Completada |
 | 13 | Contacto: modal TUI + endpoint propio (ver `SPEC-contacto.md`) — email/teléfono fuera de la web | ✅ Completada (frontend) · ⬜ backend VPS pendiente |
-| 14 | Despliegue Cloudflare Tunnel + endpoint (ver `PLAN-deploy.md`) — base `/cv`, Caddy, Resend | ⬜ En curso (código listo) · ⬜ despliegue VPS pendiente |
+| 14 | Despliegue Cloudflare Tunnel + endpoint (ver `PLAN-deploy.md`) — base `/cv`, Caddy, Resend | ✅ Desplegado (sitio público OK) · ⬜ prueba envío (Resend verificando dominio) |
 
 ## Historial de fases
 

@@ -1,4 +1,7 @@
-FROM cloudflare/cloudflared:latest
-# El token se lee del entorno (EnvironmentFile del quadlet, chmod 600):
-# nunca va en la imagen ni en el repo.
-CMD ["sh", "-c", "cloudflared tunnel --no-autoupdate run --token \"$TUNNEL_TOKEN\""]
+FROM docker.io/cloudflare/cloudflared:latest
+# La imagen oficial es distroless (sin shell). El token llega por la env var
+# TUNNEL_TOKEN (--token [$TUNNEL_TOKEN], soporte nativo de cloudflared) desde
+# el EnvironmentFile del quadlet (~/web-cv-secrets/cloudflared.env, chmod 600).
+# El token nunca va en la imagen ni en el repo.
+ENTRYPOINT ["cloudflared", "tunnel", "--no-autoupdate", "run"]
+CMD []

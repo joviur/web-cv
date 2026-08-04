@@ -1,9 +1,9 @@
 # Caddy — Web CV (servido bajo /cv, montado en el contenedor)
 # El túnel de Cloudflare apunta a 127.0.0.1:8080; nada escucha en 80/443.
 :80 {
-	# Endpoint de contacto: /cv/api/* → contenedor contacto-api (loopback)
+	# Endpoint de contacto: /cv/api/* → contenedor contacto-api (red webcv-net)
 	handle_path /cv/api/* {
-		reverse_proxy 127.0.0.1:8081
+		reverse_proxy http://contacto-api:8081
 	}
 
 	# Estáticos: dist/ montado en /srv/cv (build con ASTRO_BASE=/cv)

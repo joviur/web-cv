@@ -8,8 +8,10 @@ Description=Contacto API (Web CV, Resend)
 [Container]
 Image=localhost/contacto-api:latest
 ContainerName=contacto-api
-# Solo loopback, consumido por Caddy
+# Solo loopback del host (diagnóstico); Caddy lo alcanza por la red webcv-net.
+# Red webcv-net compartida con web-cv (DNS por nombre, ver PLAN-deploy).
 PublishPort=127.0.0.1:8081:8081
+Network=webcv-net
 EnvironmentFile=/home/joviur/web-cv-secrets/contacto.env
 
 [Install]

@@ -238,6 +238,9 @@ const server = http.createServer(async (req, res) => {
   }
 })
 
-server.listen(PORT, '127.0.0.1', () => {
-  console.log(`[contacto] escuchando en 127.0.0.1:${PORT}`)
+// Escucha en todas las interfaces DEL CONTENEDOR: el aislamiento real lo da
+// el PublishPort (127.0.0.1:8081 solo en el host); dentro del contenedor,
+// Caddy lo alcanza por la red interna webcv-net (DNS por nombre).
+server.listen(PORT, () => {
+  console.log(`[contacto] escuchando en el puerto ${PORT}`)
 })

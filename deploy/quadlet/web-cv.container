@@ -7,8 +7,10 @@ Description=Web CV (Caddy, estáticos + proxy contacto)
 [Container]
 Image=docker.io/library/caddy:2-alpine
 ContainerName=web-cv
-# Solo loopback: el túnel de Cloudflare es quien entra
+# Solo loopback del host: el túnel de Cloudflare es quien entra.
+# Red webcv-net compartida con contacto-api (DNS por nombre, ver PLAN-deploy).
 PublishPort=127.0.0.1:8080:80
+Network=webcv-net
 Mount=type=bind,source=/home/joviur/web-cv/dist,target=/srv/cv,ro
 Mount=type=bind,source=/home/joviur/web-cv/Caddyfile,target=/etc/caddy/Caddyfile,ro
 

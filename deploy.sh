@@ -9,7 +9,10 @@
 #   Cero puertos abiertos: el túnel es saliente, UFW intacto.
 #
 # Este script despliega SOLO el contenido web (dist/ + Caddyfile).
-# El endpoint y los secrets se despliegan una sola vez (ver PLAN-deploy.md §6).
+# El endpoint, cloudflared y los secrets se despliegan una sola vez
+# (ver PLAN-deploy.md §6).
+#
+# Nota: usa tar sobre ssh (rsync no está disponible en este entorno Windows).
 #
 # Uso: ./deploy.sh
 # =============================================================================
@@ -18,16 +21,17 @@ set -euo pipefail
 TARGET="joviur@[ip-vps]"
 SSH_PORT=22222
 SSH="/c/Windows/System32/OpenSSH/ssh.exe -p ${SSH_PORT} -o BatchMode=yes"
-DEST="~/web-cv"
 
 echo "==> Build de producción (base /cv)..."
 ASTRO_BASE=/cv pnpm build
 
-echo "==> Transfiriendo dist/ y Caddyfile a ${TARGET}:${DEST} ..."
-rsync -avz --delete -e "/c/Windows/System32/OpenSSH/ssh.exe -p ${SSH_PORT} -o BatchMode=yes" \
-  dist/ "${TARGET}:${DEST}/dist/"
-rsync -avz -e "/c/Windows/System32/OpenSSH/ssh.exe -p ${SSH_PORT} -o BatchMode=yes" \
-  deploy/Caddyfile "${TARGET}:${DEST}/Caddyfile"
+echo "==> Transfiriendo dist/ y Caddyfile a ${TARGET}:~/web-cv ..."
+# dist/: reemplazo limpio vía tar-pipe (equivalente a rsync --delete)
+tar -C dist -czf - . | ${SSH} "${TARGET}" \
+  'rm -rf ~/web-cv/dist && mkdir -p ~/web-cv/dist && tar -xzf - -C ~/web-cv/dist'
+# Caddyfile: versionado en el repo
+tar -C deploy -czf - Caddyfile | ${SSH} "${TARGET}" \
+  'tar -xzf - -C ~/web-cv'
 
 echo "==> Reiniciando el servicio web (Caddy)..."
 ${SSH} "${TARGET}" 'systemctl --user restart web-cv && systemctl --user is-active web-cv'

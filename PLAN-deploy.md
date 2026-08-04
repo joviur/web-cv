@@ -65,29 +65,47 @@ Internet → Cloudflare (joviur.dpdns.org/cv/*)
 
 ## 6. Pasos de despliegue en el VPS (requieren permiso del usuario)
 
+> **Ejecutado el 2026-08-01.** Ajustes descubiertos durante el despliegue real:
+> - **Red `webcv-net`** (bridge custom): la red rootless por defecto (pasta) no tiene DNS por nombre → Caddy alcanza el endpoint con `http://contacto-api:8081` por la red bridge (`Network=webcv-net` en ambos quadlets).
+> - **Endpoint escucha en todas las interfaces del contenedor** (`server.listen(PORT)` sin host): el aislamiento real lo da el `PublishPort` solo-loopback en el host; el tráfico que entra al contenedor no llega a su loopback interno.
+> - **cloudflared es distroless (sin shell)**: el token viaja por env var `TUNNEL_TOKEN` (soporte nativo `--token [$TUNNEL_TOKEN]`), leída por podman desde `~/web-cv-secrets/cloudflared.env` (600). Nada de `sh -c` ni bind mounts de ficheros 600 (el contenedor corre como nonroot y no los leería).
+> - **systemd 256 bloquea `enable` de unidades generadas**: autostart con symlinks en `~/.config/systemd/user/default.target.wants/` → `/run/user/1001/systemd/generator/<servicio>.service`.
+> - **Puerto 8080**: el contenedor de pruebas `test-nginx` ocupaba 127.0.0.1:8080 → parado y eliminado (autorizado por el usuario).
+> - **rsync no existe en este entorno Windows** → deploy.sh usa tar-pipe.
+
 ```bash
 # ── 1) Secrets (una sola vez) ────────────────────────────────────────────
 mkdir -p ~/web-cv-secrets ~/web-cv
 # (los dos ficheros se crean con heredoc; chmod 600 al final)
+#   ~/web-cv-secrets/contacto.env  → PORT, RESEND_*, ASUNTO_DEFAULT, ALLOWED_ORIGINS, RATE_LIMIT
+#   ~/web-cv-secrets/cloudflared.env → TUNNEL_TOKEN=…
 
-# ── 2) Imágenes (una sola vez, o al cambiar server/contacto o deploy/cloudflared) ──
-rsync -avz server/contacto/  joviur@[ip-vps]:~/web-cv/contacto/
-rsync -avz deploy/cloudflared/ joviur@[ip-vps]:~/web-cv/cloudflared/
-ssh -p 22222 joviur@[ip-vps] \
-  'cd ~/web-cv/contacto && podman build -t contacto-api:latest . && cd ~/web-cv/cloudflared && podman build -t cloudflared-web-cv:latest .'
+# ── 2) Red (una sola vez) ────────────────────────────────────────────────
+podman network create webcv-net
 
-# ── 3) Quadlet + arranque de los 3 servicios ────────────────────────────
-rsync -avz deploy/quadlet/ joviur@[ip-vps]:~/.config/containers/systemd/
-ssh -p 22222 joviur@[ip-vps] \
-  'systemctl --user daemon-reload && systemctl --user enable --now web-cv contacto-api cloudflared-web-cv'
+# ── 3) Imágenes (una sola vez, o al cambiar server/contacto o deploy/cloudflared) ──
+# (scp server/contacto y deploy/cloudflared al VPS, después:)
+cd ~/web-cv/contacto && podman build -t contacto-api:latest .
+cd ~/web-cv/cloudflared && podman build -t cloudflared-web-cv:latest .
 
-# ── 4) Contenido web (repetible) ────────────────────────────────────────
+# ── 4) Quadlet + arranque de los 3 servicios ────────────────────────────
+# (scp deploy/quadlet/*.container → ~/.config/containers/systemd/)
+systemctl --user daemon-reload && systemctl --user start web-cv contacto-api cloudflared-web-cv
+# Autostart (systemd 256 no permite enable de unidades generadas):
+mkdir -p ~/.config/systemd/user/default.target.wants
+for s in web-cv contacto-api cloudflared-web-cv; do
+  ln -sf /run/user/1001/systemd/generator/$s.service ~/.config/systemd/user/default.target.wants/$s.service
+done
+
+# ── 5) Contenido web (repetible) ────────────────────────────────────────
 ./deploy.sh
 
-# ── 5) Pruebas ──────────────────────────────────────────────────────────
-ssh … 'curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8080/cv/'          # 200
-ssh … 'curl -s http://127.0.0.1:8081/health'                                        # {"ok":true}
-# Envío end-to-end desde https://joviur.dpdns.org/cv/ cuando Resend verifique el dominio
+# ── 6) Pruebas ──────────────────────────────────────────────────────────
+curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8080/cv/          # 200
+curl -s http://127.0.0.1:8081/health                                        # {"ok":true}
+curl -s http://127.0.0.1:8080/cv/api/health                                 # {"ok":true} (proxy)
+# Público: https://joviur.dpdns.org/cv/ → 200
+# Envío end-to-end: POST https://joviur.dpdns.org/cv/api/contacto (Origin https://joviur.dpdns.org)
 ```
 
 ## 7. Fuera de alcance

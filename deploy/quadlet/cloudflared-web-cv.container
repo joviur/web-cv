@@ -1,6 +1,6 @@
 # Quadlet (Podman 5.7) — Cloudflared (túnel web-cv)
 # Instalar en ~/.config/containers/systemd/cloudflared-web-cv.container y:
-#   systemctl --user daemon-reload && systemctl --user enable --now cloudflared-web-cv
+#   systemctl --user daemon-reload && systemctl --user start cloudflared-web-cv
 # Requiere: imagen localhost/cloudflared-web-cv:latest + ~/web-cv-secrets/cloudflared.env (600)
 [Unit]
 Description=Cloudflared tunnel (Web CV)
