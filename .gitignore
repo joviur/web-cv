@@ -28,3 +28,6 @@ dist-ssr
 
 # Astro (tipos generados)
 .astro/
+
+# Config local de opencode (permisos de la máquina, no va al repo)
+opencode.json
