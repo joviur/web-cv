@@ -908,6 +908,11 @@ pnpm preview   # servir dist/ localmente y revisar
 
 ## Fase 6 — Build de producción y deploy al VPS (pendiente de decisión)
 
+> **✅ RESUELTA el 2026-08-01 (fase 14 real):** el sitio se sirve con
+> **Caddy en contenedor + Cloudflare Tunnel** bajo `/cv`, cero puertos
+> abiertos (el túnel es saliente). Guía operativa completa: **`DEPLOY.md`**;
+> histórico de la fase: **`PLAN-deploy.md`**.
+
 **Objetivo:** Artefacto de producción listo y desplegado en el VPS del usuario.
 
 ### Task 6.1 — Build de producción

@@ -111,6 +111,6 @@ Review profunda en navegador (viewports 320/360/375, print simulado, ratios de c
 ## Pendientes (TODOs)
 
 - [ ] Confirmar/actualizar los logros del puesto actual NTT DATA (Software Engineer) en `src/data/cv.ts`
-- [ ] Decidir método de deploy en VPS (nginx / caddy / podman / solo Tailscale) — ver PLAN.md Fase 6
 - [ ] Rellenar `translations.en` cuando se implemente el inglés
 - [ ] Añadir proyectos reales a `cv.proyectos` cuando existan (la sección aparece sola)
+- [ ] Fase 14: prueba de envío real cuando Resend verifique `joviur.dpdns.org`

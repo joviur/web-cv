@@ -1,79 +1,157 @@
 # Web CV — José María Vizcaíno
 
-Web one-page con el CV de José María Vizcaíno (Software Engineer).
+CV one-page de José María Vizcaíno (Software Engineer) — **público en
+[https://joviur.dpdns.org/cv/](https://joviur.dpdns.org/cv/)**.
+
 Construida con **Astro 5 + TypeScript + Tailwind CSS v4** e interactividad en
-**JS vanilla** (~3 KB, cero frameworks).
+**JS vanilla** (~2.2 KB gzip, cero frameworks).
+
+| Tema claro | Tema oscuro |
+|---|---|
+| ![Web CV en tema claro](docs/captura-light.png) | ![Web CV en tema oscuro](docs/captura-dark.png) |
+
+## ✨ Características
+
+- **Estética Registry/Manpage** (light-first, JetBrains Mono) — terminal simulada:
+  prompts `josema@dev:~$`, barra TUI con semáforos, navegación `~/seccion`
+- **Boot animado del hero**: `$ whoami` y `$ cat cv.txt` se teclean al cargar;
+  el resto de la página aparece al terminar (fade de 0.5 s)
+- **Contacto por modal TUI** (`[contactar]` en navbar y footer): formulario con
+  nombre, empresa, mail, asunto (opcional) y mensaje. El email y el teléfono
+  **no se publican** — el mensaje llega al dueño vía endpoint propio + Resend
+- Scroll-spy (sección activa en la navbar), filtros de habilidades, tema
+  dark/light persistente (light por defecto), botón **PDF** con vista de
+  impresión limpia
+- **Progressive enhancement**: sin JS el contenido es visible y el formulario
+  funciona con submit nativo (patrón `html.js` en todo el sitio)
+- Accesible: `prefers-reduced-motion`, `aria-pressed`/`aria-live`, diálogo con
+  focus trap, jerarquía de headings, contraste AA
+- i18n preparado (helper `t()` con fallback a español; traducción EN pendiente)
+
+## 🏗️ Arquitectura del proyecto
+
+```
+                        ┌───────────────────────────────┐
+                        │           src/ (Astro 5)      │
+                        │                               │
+   ┌──────────────┐     │  pages/index.astro           │
+   │ data/cv.ts   │────►│   ├─ Navbar (CTA, tema, PDF) │
+   │ (contenido)  │     │   ├─ Hero (boot de tipeo)    │
+   └──────────────┘     │   ├─ Experience / Skills     │
+   ┌──────────────┐     │   │  Education / Projects    │
+   │ i18n/        │─t()►│   └─ Footer + ContactModal   │
+   │ translations │     │      lib/ · styles/ · types/ │
+   └──────────────┘     └──────────────┬────────────────┘
+                                       │  pnpm build (ASTRO_BASE=/cv)
+                                       ▼
+                                 dist/ (estáticos)
+                                       │
+                                 deploy.sh ──► VPS (ver DEPLOY.md)
+```
+
+## ☁️ Arquitectura de infraestructura
+
+```
+ Visitante ──► https://joviur.dpdns.org/cv/
+                    │
+            Cloudflare (TLS, DNS)
+                    │  túnel saliente (cloudflared) — sin puertos abiertos
+                    ▼
+      ┌────────────── VPS OVH (UFW cerrado) ──────────────────────────┐
+      │                                                               │
+      │   cloudflared (contenedor)                                    │
+      │       │                                                       │
+      │       ▼                                                       │
+      │   Caddy :8080 (contenedor web-cv · red webcv-net)             │
+      │    ├─ /cv/*      → dist/ (estáticos, bind mount ro)           │
+      │    └─ /cv/api/*  → contacto-api :8081 (contenedor Node)       │
+      │                        │                                      │
+      │                        ▼                                      │
+      │                  Resend API (SMTP)                            │
+      └────────────────────────┼──────────────────────────────────────┘
+                               ▼
+                  📧 [email-eliminado]
+```
+
+Detalles de operación y despliegue en **[DEPLOY.md](DEPLOY.md)**; decisiones de
+seguridad en **[SECURITY.md](SECURITY.md)**; patrones del frontend en
+**[ARCHITECTURE.md](ARCHITECTURE.md)**.
 
 ## ⚡ Rendimiento (build de producción, medido)
 
 | Recurso | Tamaño | gzip |
 |---|---|---|
-| HTML (con todo el contenido del CV) | 19.9 KB | 4.7 KB |
-| CSS | 19.8 KB | 4.8 KB |
-| JS (inline, 3 módulos) | 3.2 KB | **0.3 KB** |
+| HTML (todo el contenido del CV) | 25.1 KB | 5.9 KB |
+| CSS | 24.2 KB | 5.8 KB |
+| JS (3 módulos: modal, skills, i18n) | 4.3 KB | **2.2 KB** |
 
-El texto del CV está en el HTML desde el primer byte (FCP sin depender de JS) —
-antes de la migración desde Vite+React eran ~69 KB gzip de recursos con el
-contenido oculto tras la hidratación de React.
-
-## ✨ Características
-
-- One-page con scroll suave y navbar sticky
-- **Estética Registry/Manpage** (light-first, JetBrains Mono) — diseñada a propósito para evitar el "look AI" (sin azul por defecto, sin cards genéricas, sin emojis)
-- Scroll-spy: la navbar marca la sección activa (`~/experiencia`, `~/habilidades`, …)
-- Filtros de habilidades por categoría (`[ todos ] [ desarrollo ] …`)
-- Tema dark/light con persistencia en `localStorage` (light por defecto)
-- Botón **PDF** → vista de impresión limpia (`@media print`, siempre en tema claro)
-- i18n preparado: helper `t()` con fallback a español (traducción EN pendiente; botón oculto hasta entonces)
-- Sección de proyectos oculta hasta que haya proyectos que mostrar
-- Accesible: `prefers-reduced-motion`, `aria-pressed`/`aria-live`, jerarquía de headings, contraste AA
-- Sin-JS friendly: el contenido es visible aunque el JS no cargue (el reveal solo se activa con `html.js`)
+El texto del CV está en el HTML desde el primer byte (FCP sin depender de JS).
+Presupuesto JS total < 10 KB gzip (controlado en cada feature).
 
 ## 🚀 Desarrollo
 
 ```bash
-pnpm install   # dependencias (pnpm, nunca npm)
-pnpm dev       # dev server (astro dev)
-```
-
-## 🧪 Tests
-
-```bash
-pnpm test          # lógica pura (Vitest, entorno node)
-pnpm test:watch    # modo watch
+pnpm install        # dependencias (pnpm, nunca npm)
+pnpm dev            # dev server en la raíz (sin base /cv)
+pnpm test           # lógica pura (Vitest, entorno node)
+pnpm lint           # oxlint
+pnpm build          # build de producción (sin base → raíz)
+ASTRO_BASE=/cv pnpm build   # build como se despliega (base /cv)
+pnpm preview        # servir dist/ localmente
 ```
 
 ## 📝 Actualizar el CV
 
-**Un solo archivo:** `src/data/cv.ts` — contiene nombre, resumen, experiencia,
-habilidades, educación, idiomas y proyectos. La UI se adapta sola.
+**Un solo archivo:** `src/data/cv.ts` — nombre, título, ubicación, resumen,
+experiencia, habilidades, educación y proyectos. La UI se adapta sola.
 
-- Añadir un proyecto → aparece la sección "Proyectos" automáticamente.
-- Traducción EN → rellenar `translations.en` en `src/i18n/translations.ts` y
-  volver a mostrar el botón de idioma en `src/components/Navbar.astro`.
+> 🔒 **Privacidad:** el email y el teléfono **no viven en el repo**. El destino
+> real del correo está solo en el VPS (`~/web-cv-secrets/contacto.env`, 600).
+> No los añadas a `cv.ts` ni a ningún fichero del frontend.
 
-## 🏗️ Build de producción
+- Añadir un proyecto → la sección "Proyectos" aparece automáticamente.
+- Traducción EN → rellenar `translations.en` y mostrar el botón de idioma.
+
+## 🖥️ Desplegar
 
 ```bash
-pnpm build    # → dist/ (HTML estático + CSS + JS inline)
-pnpm preview  # servir dist/ localmente
+./deploy.sh         # build (base /cv) + sube dist/ + reinicia Caddy
 ```
 
-## 🖥️ Deploy (VPS)
+Guía completa (despliegue inicial, operación, troubleshooting): **DEPLOY.md**.
 
-Ver `deploy.sh` — requiere elegir el método de servir (`nginx` / `caddy` /
-contenedor podman / solo acceso Tailscale) y, si se expone al público, abrir
-puertos 80/443 en el firewall. La decisión está pendiente (ver `PROGRESS.md`).
-
-## 🗂️ Estructura
+## 🗂️ Estructura del repo
 
 ```
-src/
-├── pages/index.astro        # página única: head SEO + layout + script reveal
-├── components/              # Navbar, Hero, Experience(+Item), Skills, Education, Projects, Footer (.astro)
-├── data/cv.ts               # ⭐ contenido del CV (única fuente de verdad)
-├── types/cv.ts              # interfaces del modelo
-├── i18n/translations.ts     # diccionarios es/en + helper t()
-├── lib/skills.ts            # filtrarSkills() — lógica pura testeable
-└── styles/global.css        # Tailwind v4, tokens, dark, print, reveal
+├── src/                     # frontend Astro
+│   ├── pages/index.astro    # página única: head SEO + layout + reveal
+│   ├── components/          # Navbar, Hero, secciones, Footer, ContactModal
+│   ├── data/cv.ts           # ⭐ contenido del CV (única fuente de verdad)
+│   ├── i18n/translations.ts # diccionarios es/en + helper t()
+│   ├── lib/                 # lógica pura testeable (typing, skills)
+│   └── styles/global.css    # Tailwind v4: tokens, dark, print, modal
+├── server/contacto/         # endpoint del formulario (Node 22, 0 deps) + Containerfile
+├── deploy/                  # Caddyfile, Containerfile cloudflared, quadlets
+├── scripts/serve-cv-test.mjs# verificación local del sitio bajo /cv
+├── docs/                    # capturas del sitio
+├── deploy.sh                # build + despliegue del contenido web
+└── SPEC-*.md · PLAN-*.md    # decisiones de diseño por feature (ver abajo)
 ```
+
+## 📚 Documentación del proyecto
+
+| Documento | Contenido |
+|---|---|
+| [DEPLOY.md](DEPLOY.md) | Arquitectura de infra, despliegue inicial, operación, troubleshooting |
+| [SECURITY.md](SECURITY.md) | Privacidad, anti-spam, política de secrets, hardening |
+| [ARCHITECTURE.md](ARCHITECTURE.md) | Patrones del frontend, flujo de contacto, presupuesto JS |
+| SPEC-contacto.md | Modal de contacto + endpoint (decisiones D1–D14) |
+| SPEC-hero-typing.md · SPEC-hero-resto.md | Animación del hero y revelado del resto |
+| PLAN-deploy.md | Histórico de la fase de despliegue (Cloudflare Tunnel) |
+| PROGRESS.md | Estado por fases + historial con verificación de cada una |
+
+## 🧩 Proceso de desarrollo
+
+Cada feature sigue **Spec-Driven Design**: SPEC con decisiones cerradas →
+codificación (opencode CLI) → verificación en navegador → commit por fase →
+actualización de `PROGRESS.md`.
