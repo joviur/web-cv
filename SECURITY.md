@@ -8,7 +8,7 @@ anti-spam del formulario y política de secrets.
 - El **email real y el teléfono del dueño nunca aparecen en el frontend**:
   ni en el HTML, ni en el JS, ni ofuscados, ni en comentarios. La única vía de
   contacto es el formulario (modal TUI).
-- Verificación en cada build: `grep -ri "josema.vizcainourban\|662 690" src dist`
+- Verificación en cada build: `grep -riE "[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}|6[0-9]{2} ?[0-9]{3} ?[0-9]{3}" src dist`
   debe devolver **0 resultados** (también se comprueba que no existan `mailto:`/`tel:`).
 - El destino real del correo (`RESEND_TO`) vive **solo** en
   `~/web-cv-secrets/contacto.env` del VPS (permisos 600) — nunca en el repo.

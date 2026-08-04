@@ -196,7 +196,7 @@ contacto: {
    - Móvil (viewport 375 px): modal legible, scroll interno, teclado no tapa los campos.
    - Print: modal y botones ausentes; footer mínimo.
    - Dark mode: coherencia de colores. Console limpia.
-3. Grep de seguridad: `grep -ri "josema.vizcainourban\|662 690" src dist` → 0 resultados (el email no existe en el frontend ni en el build).
+3. Grep de seguridad: `grep -riE "[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}|6[0-9]{2} ?[0-9]{3} ?[0-9]{3}" src dist` → 0 resultados (ningún email ni teléfono en el frontend ni en el build).
 4. JS total: incremento ≤ ~2 KB gzip.
 
 ## 10. Tabla de decisiones (cerradas)

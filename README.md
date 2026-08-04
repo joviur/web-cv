@@ -70,7 +70,7 @@ Construida con **Astro 5 + TypeScript + Tailwind CSS v4** e interactividad en
       │                  Resend API (SMTP)                            │
       └────────────────────────┼──────────────────────────────────────┘
                                ▼
-                  📧 [email-eliminado]
+                    📧 contacto@joviur.dpdns.org
 ```
 
 Detalles de operación y despliegue en **[DEPLOY.md](DEPLOY.md)**; decisiones de

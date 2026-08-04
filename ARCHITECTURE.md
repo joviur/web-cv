@@ -101,7 +101,7 @@ exista `translations.en` completo).
                                                           ▼
                                                      Resend API
                                                           ▼
-                                           📧 [email-eliminado]
+                                             📧 contacto@joviur.dpdns.org
                                            (reply-to = email del visitante)
 ```
 

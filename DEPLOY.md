@@ -20,7 +20,7 @@
       │    ├─ /cv/*      → /srv/cv = ~/web-cv/dist (mount ro)         │
       │    └─ /cv/api/*  → http://contacto-api:8081 (red webcv-net)   │
       │   contacto-api — Node 22 :8081 (contenedor)                   │
-      │       └─ Resend API → [email-eliminado]          │
+      │       └─ Resend API → contacto@joviur.dpdns.org               │
       └───────────────────────────────────────────────────────────────┘
 ```
 
@@ -56,7 +56,7 @@ mkdir -p ~/web-cv-secrets ~/web-cv
 #   ~/web-cv-secrets/contacto.env:
 #     PORT=8081
 #     RESEND_API_KEY=re_…
-#     RESEND_TO=[email-eliminado]
+#     RESEND_TO=contacto@joviur.dpdns.org
 #     RESEND_FROM=contacto@joviur.dpdns.org
 #     ASUNTO_DEFAULT=Contacto desde web-cv
 #     ALLOWED_ORIGINS=https://joviur.dpdns.org

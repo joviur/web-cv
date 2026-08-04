@@ -229,8 +229,6 @@ export const cv: CvData = {
   nombre: 'José María Vizcaíno',
   titulo: 'Software Engineer',
   ubicacion: 'Alicante, España',
-  email: '[email-eliminado]',
-  telefono: '[telefono eliminado]',
   resumen:
     'Titulado en Administración de Sistemas Informáticos en Red (ASIR). ' +
     'Software Engineer con experiencia en automatización y orquestación de ' +

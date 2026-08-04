@@ -54,7 +54,7 @@ Internet → Cloudflare (joviur.dpdns.org/cv/*)
 ## 4. Requisitos externos (estado 2026-08-01)
 
 1. **Túnel Cloudflare**: ✅ creado por el usuario (`web-cv`). Token recibido → se guarda en `~/web-cv-secrets/cloudflared.env` (600). ⬜ Pendiente: confirmar **public hostname** en el dashboard: hostname `joviur.dpdns.org`, path `/cv`, service `http://localhost:8080`.
-2. **Resend**: ⬜ dominio `joviur.dpdns.org` dado de alta, **esperando propagación DNS** (registros DKIM/SPF en Cloudflare). Confirmado: `RESEND_TO=[email-eliminado]`, `from` propuesto `contacto@joviur.dpdns.org`. El envío real funcionará cuando Resend detecte el dominio (antes, el endpoint devuelve error al llamar a Resend).
+2. **Resend**: ⬜ dominio `joviur.dpdns.org` dado de alta, **esperando propagación DNS** (registros DKIM/SPF en Cloudflare). Confirmado: `RESEND_TO` apuntando al correo del dueño (definido solo en el env del VPS), `from` propuesto `contacto@joviur.dpdns.org`. El envío real funcionará cuando Resend detecte el dominio (antes, el endpoint devuelve error al llamar a Resend).
 3. La API key de Resend y el token del túnel solo viven en `~/web-cv-secrets/*.env` (600) — nunca en el repo.
 
 ## 5. Verificación local (hecha)
