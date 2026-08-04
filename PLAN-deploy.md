@@ -51,39 +51,43 @@ Internet → Cloudflare (joviur.dpdns.org/cv/*)
 - `deploy/quadlet/web-cv.container` + `contacto-api.container`: unidades Quadlet.
 - `deploy.sh`: build con `ASTRO_BASE=/cv`, rsync `dist/` + `Caddyfile`, restart `web-cv`.
 
-## 4. Pendiente del usuario (requisitos externos)
+## 4. Requisitos externos (estado 2026-08-01)
 
-1. **Túnel Cloudflare**: crear el tunnel en Zero Trust (Networks → Tunnels) y el public hostname `joviur.dpdns.org` con path `/cv` → `http://localhost:8080` (Cloudflare genera el DNS automáticamente). Entregar el **token** del tunnel (se guarda en el VPS, no en el repo).
-2. **Resend**: verificar el dominio `joviur.dpdns.org` en Resend (registros DKIM/SPF a añadir en Cloudflare — los da el panel de Resend). `from` propuesto: `contacto@joviur.dpdns.org`. Confirmar `RESEND_TO` (email real de destino).
-3. Ojo: la API key de Resend ya viajó por chat — se guarda solo en `~/web-cv-secrets/contacto.env` (600). Opcional: rotarla en Resend.
+1. **Túnel Cloudflare**: ✅ creado por el usuario (`web-cv`). Token recibido → se guarda en `~/web-cv-secrets/cloudflared.env` (600). ⬜ Pendiente: confirmar **public hostname** en el dashboard: hostname `joviur.dpdns.org`, path `/cv`, service `http://localhost:8080`.
+2. **Resend**: ⬜ dominio `joviur.dpdns.org` dado de alta, **esperando propagación DNS** (registros DKIM/SPF en Cloudflare). Confirmado: `RESEND_TO=[email-eliminado]`, `from` propuesto `contacto@joviur.dpdns.org`. El envío real funcionará cuando Resend detecte el dominio (antes, el endpoint devuelve error al llamar a Resend).
+3. La API key de Resend y el token del túnel solo viven en `~/web-cv-secrets/*.env` (600) — nunca en el repo.
 
 ## 5. Verificación local (hecha)
 
 - `pnpm run test` 13/13 · `pnpm run lint` 0 · `pnpm run build` OK.
-- Build con `ASTRO_BASE=/cv` → assets `/cv/_astro/*`, `form.action` resuelto a `/cv/api/contacto`.
-- Endpoint: arranque local + curl (JSON válido → 200, honeypot → 200 falso, mail inválido → 400, origin → 403, rate limit → 429). *(completar tras implementar)*
+- Build con `ASTRO_BASE=/cv` → assets `/cv/_astro/*`, `og:image`/favicon `/cv/og-image.png`, `form.action` resuelto a `/cv/api/contacto`.
+- Endpoint (arranque local + curl): health ✓, honeypot → 200 falso ✓, origin malo → 403 ✓, mail inválido → 400 ✓, rate limit 5/día (6º → 429) ✓, form-urlencoded ✓, respuesta HTML sin-JS ✓.
 
 ## 6. Pasos de despliegue en el VPS (requieren permiso del usuario)
 
 ```bash
-# 1) Secrets (una sola vez)
-ssh -p 22222 joviur@[ip-vps]
+# ── 1) Secrets (una sola vez) ────────────────────────────────────────────
 mkdir -p ~/web-cv-secrets ~/web-cv
-# subir contacto.env con los valores reales (chmod 600)
+# (los dos ficheros se crean con heredoc; chmod 600 al final)
 
-# 2) Imagen del endpoint (una sola vez, o al cambiar server/contacto)
-rsync -avz server/contacto/ joviur@IP:~/web-cv/contacto/
-ssh … 'cd ~/web-cv/contacto && podman build -t contacto-api:latest .'
+# ── 2) Imágenes (una sola vez, o al cambiar server/contacto o deploy/cloudflared) ──
+rsync -avz server/contacto/  joviur@[ip-vps]:~/web-cv/contacto/
+rsync -avz deploy/cloudflared/ joviur@[ip-vps]:~/web-cv/cloudflared/
+ssh -p 22222 joviur@[ip-vps] \
+  'cd ~/web-cv/contacto && podman build -t contacto-api:latest . && cd ~/web-cv/cloudflared && podman build -t cloudflared-web-cv:latest .'
 
-# 3) Quadlet + cloudflared
-rsync -avz deploy/quadlet/ joviur@IP:~/.config/containers/systemd/
-ssh … 'systemctl --user daemon-reload && systemctl --user enable --now web-cv contacto-api'
-# cloudflared: contenedor cloudflare/cloudflared con el token (unit quadlet propia)
+# ── 3) Quadlet + arranque de los 3 servicios ────────────────────────────
+rsync -avz deploy/quadlet/ joviur@[ip-vps]:~/.config/containers/systemd/
+ssh -p 22222 joviur@[ip-vps] \
+  'systemctl --user daemon-reload && systemctl --user enable --now web-cv contacto-api cloudflared-web-cv'
 
-# 4) Contenido web (repetible)
+# ── 4) Contenido web (repetible) ────────────────────────────────────────
 ./deploy.sh
 
-# 5) Prueba end-to-end: envío real desde https://joviur.dpdns.org/cv/ → llega el mail
+# ── 5) Pruebas ──────────────────────────────────────────────────────────
+ssh … 'curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8080/cv/'          # 200
+ssh … 'curl -s http://127.0.0.1:8081/health'                                        # {"ok":true}
+# Envío end-to-end desde https://joviur.dpdns.org/cv/ cuando Resend verifique el dominio
 ```
 
 ## 7. Fuera de alcance
