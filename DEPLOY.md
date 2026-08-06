@@ -59,7 +59,7 @@ mkdir -p ~/web-cv-secrets ~/web-cv
 #     RESEND_TO=contacto@joviur.dpdns.org
 #     RESEND_FROM=contacto@joviur.dpdns.org
 #     ASUNTO_DEFAULT=Contacto desde web-cv
-#     ALLOWED_ORIGINS=https://joviur.dpdns.org
+#     ALLOWED_ORIGINS=https://joviur.dpdns.org,https://www.joviur.dpdns.org
 #     RATE_LIMIT=5
 #   ~/web-cv-secrets/cloudflared.env:
 #     TUNNEL_TOKEN=eyJ…

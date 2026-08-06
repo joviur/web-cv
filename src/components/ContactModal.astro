@@ -1,5 +1,10 @@
 ---
 import { t } from '../i18n/translations'
+
+// URL del endpoint de contacto, base-aware (ASTRO_BASE=/cv en prod).
+// import.meta.env.BASE_URL NO garantiza slash final (/cv vs /cv/), se normaliza.
+const base = import.meta.env.BASE_URL
+const apiUrl = (base.endsWith('/') ? base : base + '/') + 'api/contacto'
 ---
 
 <div
@@ -28,7 +33,7 @@ import { t } from '../i18n/translations'
     <form
       class="modal-form"
       data-contacto-form
-      action="api/contacto"
+      action={apiUrl}
       method="post"
     >
       <div class="modal-honeypot" aria-hidden="true">
@@ -71,6 +76,10 @@ import { t } from '../i18n/translations'
   // === Modal de contacto (SPEC-contacto §5.1) ===
   const modal = document.querySelector<HTMLElement>('[data-modal-contacto]')
   if (modal) {
+    // URL del endpoint, base-aware (ver frontmatter). El fetch no puede usar la
+    // const del frontmatter (script cliente), se recalcula aquí.
+    const base = import.meta.env.BASE_URL
+    const apiUrl = (base.endsWith('/') ? base : base + '/') + 'api/contacto'
     const form = modal.querySelector<HTMLFormElement>('[data-contacto-form]')!
     const enviar = modal.querySelector<HTMLButtonElement>('[data-contacto-enviar]')!
     const estado = modal.querySelector<HTMLElement>('[data-contacto-estado]')!
@@ -177,7 +186,7 @@ import { t } from '../i18n/translations'
       estado.innerHTML = `<span class="text-muted">${t('contacto.enviando')}</span>`
       const data = Object.fromEntries(new FormData(form).entries())
       try {
-        const res = await fetch('api/contacto', {
+        const res = await fetch(apiUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),
@@ -190,11 +199,16 @@ import { t } from '../i18n/translations'
           `<span class="text-phos">✓ ${t('contacto.exitoTitulo')}</span><br/>` +
           `${t('contacto.gracias')}<br/>` +
           `<button type="button" class="modal-cerrar-btn" data-contacto-cerrar>[${t('contacto.cerrar')}]</button>`
-      } catch {
-        // Error: mantener los datos del usuario (CA-4.4 / RNF-6)
+      } catch (err) {
+        // Error: mantener los datos del usuario (CA-4.4 / RNF-6).
+        // El código HTTP se muestra como ayuda de diagnóstico (fix ruta/ORIGIN).
         enviar.disabled = false
         enviar.textContent = `[${t('contacto.enviar')}]`
-        estado.innerHTML = `<span class="text-amber">✗ ${t('contacto.error')}</span>`
+        const codigo = err instanceof Error && /^\d{3}$/.test(err.message)
+          ? ` (HTTP ${err.message})`
+          : ''
+        estado.innerHTML = `<span class="text-amber">✗ ${t('contacto.error')}${codigo}</span>`
+        console.error('[contacto] envío fallido:', err)
       }
     })
   }
