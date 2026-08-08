@@ -21,7 +21,6 @@ export const cv: CvData = {
         'Automatizaciones en Python: procesos batch, ETL, validaciones, informes e integración entre sistemas (FastAPI, pandas, SQLAlchemy, Playwright)',
         'Administración de infraestructura: Windows Server, IIS, máquinas virtuales, Docker/Podman y Compose',
         'Gestión de bases de datos SQL Server: consultas, diseño y mantenimiento de estructuras, usuarios y backups',
-        'Logging rotativo, trazabilidad de procesos y notificaciones automáticas por correo y Microsoft Teams',
         'Análisis funcional y técnico con cliente y usuarios de negocio — proyecto de telecomunicaciones para Orange',
       ],
     },
