@@ -46,7 +46,7 @@
 | Dominio | `joviur.dpdns.org` — zona activa en Cloudflare |
 | Túnel | Cloudflare Zero Trust (tunnel `web-cv`) con public hostname: `joviur.dpdns.org`, path `/cv` → `http://localhost:8080` |
 | Resend | Cuenta + dominio `joviur.dpdns.org` verificado + API key |
-| SSH | `ssh -p 22222 joviur@[ip-vps]` (clave ed25519) |
+| SSH | `ssh -p 22222 joviur@<ip-vps>` (clave ed25519; la IP real solo en el entorno local, nunca en este repo público) |
 
 ## 3. Despliegue inicial (una sola vez)
 
@@ -86,7 +86,7 @@ for s in web-cv contacto-api cloudflared-web-cv; do
 done
 
 # 6) Contenido web (desde el repo, en Windows)
-./deploy.sh
+VPS_TARGET="joviur@<ip-vps>" ./deploy.sh
 ```
 
 ## 4. Operación diaria
@@ -105,7 +105,7 @@ journalctl --user -u web-cv -n 20                      # peticiones Caddy
 systemctl --user restart web-cv
 
 # Actualizar el sitio (desde el repo)
-./deploy.sh    # build base /cv → sube dist/ + Caddyfile → restart web-cv
+VPS_TARGET="joviur@<ip-vps>" ./deploy.sh    # build base /cv → sube dist/ + Caddyfile → restart web-cv
 
 # Actualizar el endpoint (después de cambiar server/contacto)
 # 1) subir server/contacto → ~/web-cv/contacto

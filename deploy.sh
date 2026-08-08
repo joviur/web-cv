@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-# Deploy de la Web CV al VPS (joviur@[ip-vps], SSH puerto 22222)
+# Deploy de la Web CV al VPS (SSH puerto 22222 — IP real vía VPS_TARGET)
 #
 # Arquitectura (PLAN-deploy.md):
 #   Cloudflare Tunnel (joviur.dpdns.org/cv/*) → cloudflared (VPS)
@@ -14,11 +14,11 @@
 #
 # Nota: usa tar sobre ssh (rsync no está disponible en este entorno Windows).
 #
-# Uso: ./deploy.sh
+# Uso: VPS_TARGET="joviur@<ip-vps>" ./deploy.sh
 # =============================================================================
 set -euo pipefail
 
-TARGET="joviur@[ip-vps]"
+TARGET="${VPS_TARGET:?Define VPS_TARGET (ej: VPS_TARGET=\"joviur@<ip-vps>\" ./deploy.sh)}"
 SSH_PORT=22222
 SSH="/c/Windows/System32/OpenSSH/ssh.exe -p ${SSH_PORT} -o BatchMode=yes"
 

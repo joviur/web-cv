@@ -31,3 +31,8 @@ dist-ssr
 
 # Config local de opencode (permisos de la máquina, no va al repo)
 opencode.json
+
+# Variables de entorno reales (solo .env.example con placeholders va al repo)
+.env
+.env.*
+!.env.example
