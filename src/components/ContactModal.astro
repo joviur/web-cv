@@ -86,7 +86,10 @@ const apiUrl = (base.endsWith('/') ? base : base + '/') + 'api/contacto'
     const ventana = modal.querySelector<HTMLElement>('.modal-ventana')!
     // El modal vive dentro de <footer data-tipeo-resto>: durante el boot del
     // hero ese contenedor está display:none (E12). Si el usuario abre el modal
-    // antes, esperamos a que el contenedor se haga visible.
+    // antes, esperamos a que el contenedor se haga visible. La condición mide
+    // el display REAL, no la clase .visible: esa clase solo la añade el motor
+    // de tipeo cuando la animación corre, y con prefers-reduced-motion nunca
+    // llega (SPEC-contacto-fix-reduced-motion).
     const rest = modal.closest<HTMLElement>('[data-tipeo-resto]')
     let opener: HTMLElement | null = null
 
@@ -138,10 +141,10 @@ const apiUrl = (base.endsWith('/') ? base : base + '/') + 'api/contacto'
         )
         first?.focus()
       }
-      if (rest && !rest.classList.contains('visible')) {
+      if (rest && getComputedStyle(rest).display === 'none') {
         opener = origen
         const obs = new MutationObserver(() => {
-          if (rest.classList.contains('visible')) {
+          if (getComputedStyle(rest).display !== 'none') {
             obs.disconnect()
             show()
           }
