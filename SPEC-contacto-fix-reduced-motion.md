@@ -2,7 +2,7 @@
 
 > **Feature:** el botón `[contactar]` (navbar y footer) no abre el modal cuando el sistema tiene `prefers-reduced-motion: reduce` (Windows "Efectos de animación" OFF, macOS/iOS "Reducir movimiento", Android "Quitar animaciones"). Fix mínimo de una condición; no cambia el diseño ni el contrato API.
 >
-> **Estado:** v1.0 — **PENDIENTE DE APROBACIÓN**.
+> **Estado:** v1.0 — **APROBADA** (ejecutada 2026-08-16).
 > **Fecha:** 2026-08-16 · **Proyecto:** Web CV (Astro 7 + Vite 8) · **Depende de:** SPEC-contacto.md (v1.0), SPEC-hero-typing.md · **Ficheros afectados:** `src/components/ContactModal.astro` (único).
 
 ---
